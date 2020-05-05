@@ -8,8 +8,14 @@ We propose a charging station for electric devices available to the general publ
 
 # what we need to do:
 - program a smart contract that monitors electricity dispensed and manages token flow
-- token exchange
--- ours
--- anyone can exchange tokens
+- token exchange    
+  - ours
+  - anyone can exchange tokens
 - configure station price?
 - Program clients for car and station
+
+# todos:
+- timeline
+- diagram
+- more text in abstract
+- persona
