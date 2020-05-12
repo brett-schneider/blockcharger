@@ -19,3 +19,20 @@ We propose a charging station for electric devices available to the general publ
 - diagram
 - more text in abstract
 - persona
+
+
+---
+## notes 12.05.2020
+- simulation for meters (html, nodejs?)
+- blockchain explorer
+- smart contract (develop)
+- dispute settlement
+  - escrow
+  - [https://raiden.network raiden.network] micropayments
+- smart contract api
+  - nodejs
+  - metamask.io
+- privacy
+  - the grid needs to know information about the endpoints
+- to reduce complexity, the grid will just be viewed an entity, which transfers energy lika a cable
+- hardware requirements
