@@ -1,24 +1,27 @@
 # Abstract
 We propose a charging station for electric devices available to the general public that can be installed at any house so that there is a dense charging infrastructure, e.g. for electric vehicles
+- motivation
+- application's general idea
 
+# Main
+- describe technical approach to achieve application goal
+- identify technical challanges: security issues, privacy issues, trust issues
+- discuss how to address challenges -> choose which ones to address as part of project
+- identify necessary steps -> rough schedule with milestones
+
+---
 # requirements
 - the recipient needs a client capable of using our protocol to purchase electricity
 - the provider needs a client capable …
 - the provider needs a power outlet that powers the station and electricity to sell
 
-# what we need to do:
+# to do:
 - program a smart contract that monitors electricity dispensed and manages token flow
 - token exchange    
   - ours
   - anyone can exchange tokens
 - configure station price?
-- Program clients for car and station
-
-# todos:
-- timeline
-- diagram
-- more text in abstract
-- persona
+- program clients for car and station
 
 
 ---
@@ -36,3 +39,4 @@ We propose a charging station for electric devices available to the general publ
   - the grid needs to know information about the endpoints
 - to reduce complexity, the grid will just be viewed an entity, which transfers energy lika a cable
 - hardware requirements
+
