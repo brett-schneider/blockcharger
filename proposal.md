@@ -10,6 +10,13 @@ We propose a charging station for electric devices available to the general publ
 - identify necessary steps -> rough schedule with milestones
 
 ---
+- Transaction guarantees for seller and buyers
+  - time of payment: micro-payments?
+  - control of delivery
+  - secure trading protocol 
+  - storage of sensitive data/privacy concerns
+
+
 # requirements
 - the recipient needs a client capable of using our protocol to purchase electricity
 - the provider needs a client capable …
