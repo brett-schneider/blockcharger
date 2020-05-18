@@ -13,6 +13,8 @@ As pressure for the international community rises to meet the agreed climate goa
 
 - implemented as smart contract (e.g. in Ethereum)
 - ...
+- Registration and Setup
+- Communication
 - Authentification?
 
 ### Assumptions
