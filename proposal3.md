@@ -6,8 +6,6 @@
 ## Background Motivation
 As pressure for the international community rises to meet the agreed climate goals the integration of E-mobility among other low-carbon energy technologies becomes increasingly important. To successfuly implement changes within the transport sector a widespread, client friendly and easily accessible charging infrastructure is needed. Main stakeholders in the charging business are Charg Point Operators (CPOs) manageing the charging stations and eMobility Service Providers (eMSPs) employing settlement services (including apps, charging cards, etc.). The latter appear with a wide variety of tariffs and concepts, making it difficult for users to charge barrier-free at low cost. Our project aims to provide an uniform **P2P/B2P/E-Mobility-Roaming??** (ERP) energy trading solution guaranteeing transparent, non-discriminatory access to all clients.
 
-- MSPs notwendig?
-- Rollenmodel EU-Richtlinie?
 
 ## Technical Approach
 
@@ -17,9 +15,11 @@ As pressure for the international community rises to meet the agreed climate goa
 - Communication
 - Authentification?
 
+
 ### Assumptions
 - CPOs/eMSPs set the price
 - Within system bounderies: CPO MSP client (electric utilities/grid not being considered)
+
 
 ### Technical Challenges
 Security, privacy and trust issues are being addressed ...
