@@ -1,5 +1,5 @@
 # Project Title - Group Nickname
-##### Prepared by: Our names
+##### Prepared by: Christoph Bretschneider, Diana Nguyen, Mateusz Piotrowski, Luisa Rahn
 *20 May, 2020*
 
 
