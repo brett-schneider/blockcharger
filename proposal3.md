@@ -58,27 +58,27 @@ Security, privacy and trust issues are being addressed ...
 
 2. **Scam Prevention...**
 
-  TODO: Do we want to introduce some kind of a scam prevention system? Even though a single transaction loss could be small, if we allow for many little scam transactions to happen constantly then we might have a huge problem on the network.
-
-
-  How would you implement a secure trading protocol so that no involved party can cheat?
-
-  We assume that micropayments are going to render this problem insignificant.
+      TODO: Do we want to introduce some kind of a scam prevention system? Even though a single transaction loss could be small, if we allow for many little scam transactions to happen constantly then we might have a huge problem on the network.
+    
+    
+      How would you implement a secure trading protocol so that no involved party can cheat?
+    
+      We assume that micropayments are going to render this problem insignificant.
   
 3. **Trust through Escrows**
   
-  Alternatively, we may think about escrows:
-
-  See http://www.jbonneau.com/doc/GBGN17-FC-physical_escrow.pdf
-
-  Raiden has an on-chain deposit system that locks it in a smart contract until one party closes the payment channel by sending in their balance sheet. The other party has to then send in their balance sheet. If they match, funds from the deposit are distributed accordingly. We should think of a system to settle disputes for when they do not.
+      Alternatively, we may think about escrows:
+    
+      See http://www.jbonneau.com/doc/GBGN17-FC-physical_escrow.pdf
+    
+      Raiden has an on-chain deposit system that locks it in a smart contract until one party closes the payment channel by sending in their balance sheet. The other party has to then send in their balance sheet. If they match, funds from the deposit are distributed accordingly. We should think of a system to settle disputes for when they do not.
 
 4. **Privacy ...**
-  As the blockchain is publicly availably, what (sensitive) data do you store on the blockchain, are there privacy concerns, and if so, how would you solve these?
-
-
-  Grouping transactions together to hide exact amounts of energy transfers and fees.
-  The final payment can be seen on-chain after the closure of the channel. This is a privacy risk in the way that the movements of a car can be traced much like with Cash Machine withdrawals and should be addressed ... 
+      As the blockchain is publicly availably, what (sensitive) data do you store on the blockchain, are there privacy concerns, and if so, how would you solve these?
+    
+    
+      Grouping transactions together to hide exact amounts of energy transfers and fees.
+      The final payment can be seen on-chain after the closure of the channel. This is a privacy risk in the way that the movements of a car can be traced much like with Cash Machine withdrawals and should be addressed ... 
 
 
 ## Milestones
