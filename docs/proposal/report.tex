@@ -1,0 +1,112 @@
+\documentclass[10pt]{adtreport}
+
+\usepackage{geometry}
+ \geometry{
+ a4paper,
+ left=20mm,
+ right=20mm,
+ top=20mm,
+ bottom=30mm,
+ }
+
+\usepackage{times}
+\usepackage{amssymb}
+\usepackage{amsmath}
+\usepackage{footnote}
+\usepackage{enumitem}
+\usepackage{graphicx}
+\usepackage[group-separator={,}]{siunitx}
+\usepackage{booktabs}
+\usepackage{color,soul}
+\usepackage{hyperref}
+\usepackage{titlesec}
+
+
+\usepackage{biblatex}
+\addbibresource{bib.bib}
+
+\titlespacing*{\section}{0pt}{1.5\baselineskip}{0.5\baselineskip}
+\titlespacing*{\subsection}
+{0pt}{1\baselineskip}{0.5\baselineskip}
+\titlespacing*{\subsubsection}
+{0pt}{0.7\baselineskip}{0.5\baselineskip}
+
+\begin{document}
+
+\title{Group Shilling \\
+A Blockchain-Based System for Peer-to-Peer Energy Trading}
+\author{Christoph Bretschneider 414454, Diana Nguyen 363636
+\newline Mateusz Piotrowski 406664, Luisa Rahn 397040
+}
+\institute{}
+% \today
+
+\maketitle              
+
+
+\section{Motivation}
+As pressure for the international community rises to meet the agreed climate goals the integration of E-mobility among other low-carbon energy technologies becomes increasingly important. To successfully implement changes within the transport sector a widespread, client friendly and easily accessible charging infrastructure is needed. Main stakeholders in the charging business are Charging Point Operators (CPOs) managing the charging stations and eMobility Service Providers (eMSPs) employing settlement services (including apps, charging cards, etc.). The latter appear with a wide variety of tariffs and concepts, making it difficult for users to charge barrier-free at low cost \cite{lade-report}. Our project aims to provide an uniform P2P/B2P/E-Mobility-Roaming solution guaranteeing transparent, non-discriminatory access to all clients.
+
+
+
+\section{Proposal}
+We propose an Ethereum smart contract \cite{wood2014ethereum} containing the market logic that allow peers to trade energy. In our use case scenario the energy providers (i.e., sellers) set the price and there is no auction system. Hence, the market simply entails publishing and buying energy offers.
+As of the current market situation participants include CPOs, eMSPs and EV drivers. We aim to enable participation for anyone selling and buying electrical energy. Electric utilities are not being considered within our use case.
+
+\subsection*{Technical Challenges}
+
+We intend to use micropayments to address most of the technical challenges we identified. The idea is to utilize an off-chain solution such as Raiden Network \cite{raiden} and pass the tokens to the seller every time the consumer confirms the delivery of the energy unit.
+
+\subsubsection{Speed.}
+% \hl{Is it even possible to trade energy this way?}
+Blockchain payments take minutes to complete. In this scenario this is not acceptable. We aim to use an off-chain mircopayment protocol to transfer funds quickly and settle the balance on-chain once the process is completed. Ultra rapid chargers give 100 kW \cite{tesla-charge}, 1 kWh is roughly 0.30 EUR \cite{bmwi}, so at most, 30 EUR/h split up in 0.05 EUR units amounts to 600 payments per hour. This is the speed we are looking for in a micropayments protocol.
+
+\subsubsection{Trust.}
+
+% \hl{How would you control that they actually delivered what they promised? How would you implement a secure trading protocol so that no involved party can cheat? How would you control that they actually delivered what they promised?}
+
+To start the charging process, initial deposits to a smart contract are required against which hash-locked micropayments are made off-chain each time a predefined amount of energy is dispensed. Either party may terminate the ongoing transaction at any time. Once the charging process is terminated, the balance is settled against the deposit and the final transaction added to the blockchain.
+
+% \hl{However, we've not come up with an idea yet how to prevent any form of cheating.}
+% \hl{For example, when exactly would a party get paid?}
+% \hl{Raiden has an on-chain deposit system that locks it in a smart contract until one party closes the payment channel by sending in their balance sheet. The other party has to then send in their balance sheet. If they match, funds from the deposit are distributed accordingly. We should think of a system to settle disputes for when they do not.}
+% \hl{Trust through Escrows}
+We have considered escrow to establish trust, but we have come to the conclusion that escrow handling will be complicated in scenarios where the full amount can not be delivered. 
+
+\subsubsection{Security.}
+We assume that a well implemented smart contract is going to be secure due to the underlying blockchain technology.
+
+\subsubsection{Privacy.}
+Every charging process will be added to the blockchain once the transaction is terminated. Hence vehicle locations could be tracked if wallet addresses are known. This privacy issue may be addressed by grouping transactions together to hide exact amounts of energy transfers and fees.
+
+\section{Milestones}
+
+\begin{enumerate}
+\item Set up tool stack. Get familiar with micropayments technologies, DApp browsers and Ethereum light client. (Week 1)
+
+\item Implement smart contract and create transactions on the Ethereum chain, establish payment channel and make off-chain micropayments, set up API for communication with payment channel and smart contract. (Week 2)
+
+\item Establish communication between smart contract and meter. (Week 3-4)
+
+\item Address privacy issues and dispute settlement. (Week 5)
+
+\item Testing, bug fixes and demo preparation. (Week 6-7)
+\end{enumerate}
+
+
+
+
+
+\newpage
+
+
+
+\section*{Appendix}
+\subsection*{Acknowledgements}
+There are other projects pursuing a similar goal to ours, most notably Share \& Charge \cite{share-charge}. The main difference is that our approach does not require cooperation from a large energy provider and has no vehicle sharing. We focus on a decentralized charging infrastructure where anyone can participate.
+
+
+\printbibliography
+
+
+\end{document}
