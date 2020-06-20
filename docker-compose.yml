@@ -8,7 +8,7 @@ services:
         ipv4_address: ${GETH_IP_ADDR}
     ports:
       - 30303:30303
-      - ${GETH_RPC_PORT}:8545
+      - 8545:${GETH_RPC_PORT}
     command:
       --goerli
       --rpc
