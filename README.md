@@ -24,7 +24,7 @@ Start Geth and Raiden nodes:
 
 ```console
 vagrant@vm:~$ cd /vagrant
-vagrant@vm:/vagrant$ sudo docker-compose up geth raiden
+vagrant@vm:/vagrant$ sudo docker-compose up geth raiden1
 ```
 
 #### Caveats
