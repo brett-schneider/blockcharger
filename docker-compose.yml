@@ -17,6 +17,8 @@ services:
 
   raiden1:
     image: raidennetwork/raiden:latest
+    depends_on:
+      - geth
     networks:
       raiden_net:
         ipv4_address: '${RAIDEN1_IP_ADDR}'
@@ -28,6 +30,8 @@ services:
 
   raiden2:
     image: raidennetwork/raiden:latest
+    depends_on:
+      - geth
     networks:
       raiden_net:
         ipv4_address: '${RAIDEN2_IP_ADDR}'
@@ -39,6 +43,8 @@ services:
 
   raiden3:
     image: raidennetwork/raiden:latest
+    depends_on:
+      - geth
     networks:
       raiden_net:
         ipv4_address: '${RAIDEN3_IP_ADDR}'
