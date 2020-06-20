@@ -1,9 +1,26 @@
-### Infrastructure setup
+## Development
 
-The infrastucture is managed with Vagrant.
+#### Prerequisites
 
-Start the virtual machine with the following command:
+- [Vagrant](https://www.vagrantup.com/)
 
-```sh
-vagrant up
+#### Quick start
+
+Start the virtual machine:
+
+```console
+you@host$ vagrant up
+```
+
+Log into the VM:
+
+```console
+you@host$ vagrant ssh
+```
+
+Start Geth and Raiden nodes:
+
+```console
+vagrant@vm:~$ cd /vagrant
+vagrant@vm:/vagrant$ sudo docker-compose up geth raiden
 ```
