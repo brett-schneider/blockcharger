@@ -1,0 +1,4 @@
+/.vagrant/
+/ubuntu-bionic-18.04-cloudimg-console.log
+/volumes/geth_persistent_blockchain/geth/
+/volumes/geth_persistent_blockchain/goerli/
