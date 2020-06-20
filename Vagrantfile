@@ -6,7 +6,7 @@ Vagrant.configure("2") do |config|
   # version of the guest with the VirtualBox version on the host.
   config.vagrant.plugins = [ "vagrant-vbguest" ]
 
-  config.vm.box = "ubuntu/focal64"
+  config.vm.box = "ubuntu/bionic64"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
