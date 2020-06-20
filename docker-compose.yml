@@ -1,0 +1,58 @@
+version: '3'
+services:
+
+  geth:
+    image: ethereum/client-go:v1.9.15
+    networks:
+      raiden_net:
+        ipv4_address: ${GETH_IP_ADDR}
+    ports:
+      - 30303:30303
+      - ${GETH_RPC_PORT}:8545
+    command:
+      --networkid 5
+      --rpc
+      --rpcaddr "0.0.0.0"
+      --nousb
+
+  raiden1:
+    image: raidennetwork/raiden:latest
+    networks:
+      raiden_net:
+        ipv4_address: '${RAIDEN1_IP_ADDR}'
+    volumes:
+      - './volumes/raiden1:/shared'
+    command:
+      --datadir /shared
+      --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
+
+  raiden2:
+    image: raidennetwork/raiden:latest
+    networks:
+      raiden_net:
+        ipv4_address: '${RAIDEN2_IP_ADDR}'
+    volumes:
+      - './volumes/raiden2:/shared'
+    command:
+      --datadir /shared
+      --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
+
+  raiden3:
+    image: raidennetwork/raiden:latest
+    networks:
+      raiden_net:
+        ipv4_address: '${RAIDEN3_IP_ADDR}'
+    volumes:
+      - './volumes/raiden3:/shared'
+    command:
+      --datadir /shared
+      --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
+
+
+networks:
+  raiden_net:
+    driver: bridge
+    ipam:
+      driver: default
+      config:
+      - subnet: ${RAIDEN_NET}
