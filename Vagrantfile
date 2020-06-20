@@ -7,6 +7,7 @@ Vagrant.configure("2") do |config|
   config.vagrant.plugins = [ "vagrant-vbguest" ]
 
   config.vm.box = "ubuntu/bionic64"
+  config.vm.hostname = "vm"
 
   # Create a forwarded port mapping which allows access to a specific port
   # within the machine from a port on the host machine and only allow access
