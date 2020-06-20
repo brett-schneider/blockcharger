@@ -6,6 +6,8 @@ services:
     networks:
       raiden_net:
         ipv4_address: ${GETH_IP_ADDR}
+    volumes:
+      - ./volumes/geth_persistent_blockchain:/shared
     ports:
       - 30303:30303
       - 8545:${GETH_RPC_PORT}
@@ -14,6 +16,8 @@ services:
       --rpc
       --rpcaddr "0.0.0.0"
       --nousb
+      --datadir /shared
+      --ipcpath $HOME/.ethereum/geth.ipc
 
   raiden1:
     image: raidennetwork/raiden:latest
