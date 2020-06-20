@@ -6,6 +6,5 @@ password-file = "/shared/passphrases/37275f6314caa14de6a2d5332709f97d89ef162f.pa
 user-deposit-contract-address = "0x0794F09913AA8C77C8c5bdd1Ec4Bb51759Ee0cC5"
 network-id = "goerli"
 accept-disclaimer = true
-routing-mode = "pfs"
 enable-monitoring = "True"
 pathfinding-service-address = "https://pfs-goerli.services-dev.raiden.network"
