@@ -13,8 +13,8 @@ services:
       - 8545:${GETH_RPC_PORT}
     command:
       --goerli
-      --rpc
-      --rpcaddr "0.0.0.0"
+      --http
+      --http.addr "0.0.0.0"
       --nousb
       --datadir /shared
       --ipcpath $HOME/.ethereum/geth.ipc
