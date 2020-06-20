@@ -9,4 +9,3 @@ accept-disclaimer = true
 routing-mode = "pfs"
 enable-monitoring = "True"
 pathfinding-service-address = "https://pfs-goerli-with-fee.services-dev.raiden.network"
-api-address = "localhost:5001"
