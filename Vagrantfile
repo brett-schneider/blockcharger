@@ -23,6 +23,7 @@ Vagrant.configure("2") do |config|
   config.vm.provision "shell", inline: <<-SHELL
     export DEBIAN_FRONTEND="noninteractive"
     apt-get update
+    apt-get upgrade -y
     apt-get install -y docker.io docker-compose
   SHELL
 end
