@@ -1,3 +1,5 @@
+# Group Shilling: A Blockchain-Based System for Peer-to-Peer Energy Trading
+
 ## Development
 
 #### Prerequisites
