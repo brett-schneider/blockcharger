@@ -11,6 +11,8 @@ services:
     ports:
       - 30303:30303
       - 8545:${GETH_RPC_PORT}
+    # XXX: This is a workaround for #23.
+    restart: on-failure
     command:
       --goerli
       --http
