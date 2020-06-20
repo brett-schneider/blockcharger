@@ -24,3 +24,7 @@ Start Geth and Raiden nodes:
 vagrant@vm:~$ cd /vagrant
 vagrant@vm:/vagrant$ sudo docker-compose up geth raiden
 ```
+
+#### Caveats
+
+On the first run, it might be wort to start the Geth container on its own to let it synchronize the blockchain.
