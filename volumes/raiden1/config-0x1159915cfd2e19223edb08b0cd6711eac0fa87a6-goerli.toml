@@ -2,7 +2,6 @@ environment-type = "development"
 keystore-path = "/shared/keystore"
 address = "0x1159915CFd2E19223edb08B0CD6711EAC0fA87a6"
 password-file = "/shared/passphrases/1159915cfd2e19223edb08b0cd6711eac0fa87a6.passphrase.txt"
-user-deposit-contract-address = "0x0794F09913AA8C77C8c5bdd1Ec4Bb51759Ee0cC5"
 network-id = "goerli"
 accept-disclaimer = true
 enable-monitoring = "True"
