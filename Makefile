@@ -1,3 +1,8 @@
+# Open a shell in the container running Raiden node.
+.PHONY: raiden1_shell
+raiden1_shell:
+	sudo docker exec -it vagrant_raiden1_1 /bin/bash
+
 # Open a shell in the container running Geth.
 # Then it is possible to interact with Geth with commands like:
 # - geth attach
