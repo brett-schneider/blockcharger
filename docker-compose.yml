@@ -5,7 +5,13 @@ x-raiden: &raiden
     depends_on:
       - geth
     command:
+      --keystore-path /shared/keystore
+      --environment-type development
+      --showconfig
+      --network-id goerli
+      --accept-disclaimer
       --datadir /shared
+      --enable-monitoring
       --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
 
 services:

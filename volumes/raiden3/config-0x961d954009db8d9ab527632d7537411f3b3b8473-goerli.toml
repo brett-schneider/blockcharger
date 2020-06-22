@@ -1,8 +1,3 @@
-environment-type = "development"
-keystore-path = "/shared/keystore"
 address = "0x961D954009Db8D9ab527632D7537411f3b3b8473"
 password-file = "/shared/passphrases/961d954009db8d9ab527632d7537411f3b3b8473.passphrase.txt"
-network-id = "goerli"
-accept-disclaimer = true
-enable-monitoring = "True"
 pathfinding-service-address = "https://pfs-goerli-with-fee.services-dev.raiden.network"
