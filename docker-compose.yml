@@ -5,14 +5,6 @@ x-raiden: &raiden
     network_mode: "host"
     depends_on:
       - geth
-    command:
-      --keystore-path /shared/keystore
-      --environment-type development
-      --network-id goerli
-      --accept-disclaimer
-      --datadir /shared
-      --enable-monitoring
-      --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
 
 services:
 
@@ -36,21 +28,42 @@ services:
 
   raiden1:
     <<: *raiden
-    ports:
-      - 5001:${RAIDEN_API_PORT}
     volumes:
       - './volumes/raiden1:/shared'
+    command:
+      --keystore-path /shared/keystore
+      --environment-type development
+      --network-id goerli
+      --accept-disclaimer
+      --datadir /shared
+      --enable-monitoring
+      --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
+      --api-address 127.0.0.1:5001
 
   raiden2:
     <<: *raiden
-    ports:
-      - 5002:${RAIDEN_API_PORT}
     volumes:
       - './volumes/raiden2:/shared'
+    command:
+      --keystore-path /shared/keystore
+      --environment-type development
+      --network-id goerli
+      --accept-disclaimer
+      --datadir /shared
+      --enable-monitoring
+      --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
+      --api-address 127.0.0.1:5002
 
   raiden3:
     <<: *raiden
-    ports:
-      - 5003:${RAIDEN_API_PORT}
     volumes:
       - './volumes/raiden3:/shared'
+    command:
+      --keystore-path /shared/keystore
+      --environment-type development
+      --network-id goerli
+      --accept-disclaimer
+      --datadir /shared
+      --enable-monitoring
+      --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
+      --api-address 127.0.0.1:5003
