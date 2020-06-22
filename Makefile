@@ -15,6 +15,10 @@ raiden_run:
 geth_shell:
 	sudo docker exec -it vagrant_geth_1 /bin/sh
 
+.PHONY: geth
+geth:
+	sudo docker-compose up geth
+
 .PHONY: raiden1
 raiden1:
 	sudo docker-compose up raiden1
