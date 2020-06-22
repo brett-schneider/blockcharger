@@ -19,7 +19,7 @@ services:
       --http.addr "0.0.0.0"
       --nousb
       --datadir /shared
-      --ipcpath $HOME/.ethereum/geth.ipc
+      --ipcpath /root/.ethereum/geth.ipc
 
   raiden1:
     image: raidennetwork/raiden:latest
