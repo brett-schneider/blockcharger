@@ -1,13 +1,12 @@
 version: '3.4'
 
 x-raiden: &raiden
-    image: raidennetwork/raiden:latest
+    image: raidennetwork/raiden:v1.1.0
     depends_on:
       - geth
     command:
       --keystore-path /shared/keystore
       --environment-type development
-      --showconfig
       --network-id goerli
       --accept-disclaimer
       --datadir /shared
