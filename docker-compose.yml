@@ -2,6 +2,7 @@ version: '3.4'
 
 x-raiden: &raiden
     image: raidennetwork/raiden:v1.1.0
+    network_mode: "host"
     depends_on:
       - geth
     command:
@@ -17,9 +18,7 @@ services:
 
   geth:
     image: ethereum/client-go:v1.9.15
-    networks:
-      raiden_net:
-        ipv4_address: ${GETH_IP_ADDR}
+    network_mode: "host"
     volumes:
       - ./volumes/geth_persistent_blockchain:/shared
     ports:
@@ -37,9 +36,6 @@ services:
 
   raiden1:
     <<: *raiden
-    networks:
-      raiden_net:
-        ipv4_address: '${RAIDEN1_IP_ADDR}'
     ports:
       - 5001:${RAIDEN_API_PORT}
     volumes:
@@ -47,9 +43,6 @@ services:
 
   raiden2:
     <<: *raiden
-    networks:
-      raiden_net:
-        ipv4_address: '${RAIDEN2_IP_ADDR}'
     ports:
       - 5002:${RAIDEN_API_PORT}
     volumes:
@@ -57,18 +50,7 @@ services:
 
   raiden3:
     <<: *raiden
-    networks:
-      raiden_net:
-        ipv4_address: '${RAIDEN3_IP_ADDR}'
     ports:
       - 5003:${RAIDEN_API_PORT}
     volumes:
       - './volumes/raiden3:/shared'
-
-networks:
-  raiden_net:
-    driver: bridge
-    ipam:
-      driver: default
-      config:
-      - subnet: ${RAIDEN_NET}
