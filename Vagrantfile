@@ -28,5 +28,8 @@ Vagrant.configure("2") do |config|
     apt-get update
     apt-get upgrade -y
     apt-get install -y docker.io docker-compose
+
+    # Set an appropriate timezone.
+    timedatectl set-timezone Europe/Berlin
   SHELL
 end
