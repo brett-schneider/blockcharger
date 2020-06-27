@@ -44,7 +44,7 @@ def pay(token, target, amount):
                 , 'reveal_timeout': '50'
                 , 'settle_timeout': '500'
                 , 'token_address': token
-                , 'total_deposit': '35000000', })
+                , 'total_deposit': getmaxcharge()*priceperkwh, })
         print (r.status_code)
         print (r.text)
     
