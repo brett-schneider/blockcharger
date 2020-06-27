@@ -27,6 +27,8 @@ Vagrant.configure("2") do |config|
     export DEBIAN_FRONTEND="noninteractive"
     apt-get update
     apt-get upgrade -y
+
+    # Install Docker-related bits.
     apt-get install -y docker.io docker-compose
 
     # Set an appropriate timezone.
