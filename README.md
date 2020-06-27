@@ -20,6 +20,8 @@ Log into the VM:
 you@host$ vagrant ssh
 ```
 
+#### Geth and Raiden nodes
+
 Start Geth and Raiden nodes:
 
 ```console
@@ -35,6 +37,20 @@ vagrant@vm:/vagrant$ sudo docker-compose up geth
 
 ```console
 vagrant@vm:/vagrant$ sudo docker-compose up raiden1
+```
+
+#### demo.py
+
+Install the virtual environment and dependencies:
+
+```console
+vagrant@vm:/vagrant$ make venv
+```
+
+Run demo.py:
+
+```console
+vagrant@vm:/vagrant$ make demo
 ```
 
 ### Caveats

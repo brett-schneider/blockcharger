@@ -3,3 +3,4 @@
 /volumes/geth_persistent_blockchain/geth/
 /volumes/geth_persistent_blockchain/goerli/
 /.vscode
+/venv

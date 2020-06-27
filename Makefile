@@ -1,3 +1,20 @@
+VENV_DIR=	./venv
+PIP=		$(VENV_DIR)/bin/pip
+PYTHON=		$(VENV_DIR)/bin/python
+
+# Initialize the virtual environment for Python and install required
+# dependencies.
+.PHONY: venv
+venv:
+	rm -rf -- "$(VENV_DIR)"
+	virtualenv --python=python3.8 "$(VENV_DIR)"
+	$(PIP) install -r requirements.txt
+
+# Run demo.
+.PHONY: demo
+demo:
+	$(PYTHON) dev/demo.py
+
 # Open a shell in the container running Raiden node.
 .PHONY: raiden1_shell
 raiden1_shell:
