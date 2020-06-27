@@ -36,5 +36,9 @@ Vagrant.configure("2") do |config|
 
     # Set an appropriate timezone.
     timedatectl set-timezone Europe/Berlin
+
+    # Add user vagrant to the docker group so that it is possible to operate
+    # the docker command without sudo.
+    usermod -aG docker vagrant
   SHELL
 end
