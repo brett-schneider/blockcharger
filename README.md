@@ -2,11 +2,11 @@
 
 ## Development
 
-#### Prerequisites
+### Prerequisites
 
 - [Vagrant](https://www.vagrantup.com/)
 
-#### Quick start
+### Quick start
 
 Start the virtual machine:
 
@@ -37,11 +37,11 @@ vagrant@vm:/vagrant$ sudo docker-compose up geth
 vagrant@vm:/vagrant$ sudo docker-compose up raiden1
 ```
 
-#### Caveats
+### Caveats
 
 On the first run, it might be wort to start the Geth container on its own to let it synchronize the blockchain.
 
-#### Troubleshooting
+### Troubleshooting
 
 > raiden1_1  | requests.exceptions.ConnectionError: HTTPSConnectionPool(host='api.github.com', port=443): Max retries exceeded with url: /repos/raiden-network/raiden/releases/latest (Caused by NewConnectionError('<urllib3.connection.VerifiedHTTPSConnection object at 0x7f5333328550>: Failed to establish a new connection: [Errno -5] No address associated with hostname'))  
 
