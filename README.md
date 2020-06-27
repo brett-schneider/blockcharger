@@ -55,7 +55,7 @@ vagrant@vm:/vagrant$ make demo
 
 ### Caveats
 
-On the first run, it might be wort to start the Geth container on its own to let it synchronize the blockchain.
+It might be worth to start the Geth container first to let it synchronize the blockchain before starting Raiden nodes.
 
 ### Troubleshooting
 
