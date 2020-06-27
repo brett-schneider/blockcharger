@@ -1,0 +1,6 @@
+error codes
+# no route with sufficient funds
+409
+{"errors": "Payment couldn't be completed because: PFS: Target does not have a channel with sufficient capacity ([0] < 1). Approximate block at the time of the request 2947017 (PFS error code: 2201)"}
+409
+{"errors": "Payment couldn't be completed because: there is no route available"}
