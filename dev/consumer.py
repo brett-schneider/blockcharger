@@ -59,17 +59,20 @@ def openchan(token,target):
 pget ('channels/{}'.format(token))
 counter = random.randrange(1,1000000000)
 while True:
-    start = time.time()
-    s = pay(token, charger, 1, counter)
-    end = time.time()
-    print (end - start)
-    if s.status_code == 409:   
-        print ('409 encountered, opening channel')
-        o = openchan(token,charger)
-        if o.status_code != 201:
-            break
-    counter += 1
-    # 409 conflict: If the address or the amount is invalid or if there is no path to the target, or if the identifier is already in use for a different payment.
+    try:
+        start = time.time()
+        s = pay(token, charger, 1, counter)
+        end = time.time()
+        print (end - start)
+        # 409 conflict: If the address or the amount is invalid or if there is no path to the target, or if the identifier is already in use for a different payment.
+        if s.status_code == 409:   
+            print ('409 encountered, opening channel')
+            o = openchan(token,charger)
+            if o.status_code != 201:
+                break
+        counter += 1
+    except KeyboardInterrupt:
+        break
 
     # 200 OK
     # 404 Not Found: The given token and / or target addresses are not valid eip55-encoded Ethereum addresses
