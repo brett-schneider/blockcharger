@@ -21,19 +21,24 @@ factor = 1000000000000000000
     
 q = node.histpay()
 payhist = json.loads(q.text)
-print (type(payhist))
+# print (type(payhist))
 
 for f in payhist:
-    print (f)
-    print (datetime.strptime(f['log_time'],'%Y-%m-%dT%H:%M:%S.%f'))
+    if 'identifier' not in f:
+        f['identifier'] = '0'
+    if 'amount' not in f:
+        f['amount'] = '0'
+    # print (f)
+    print ('{}: {} at {} :: {}'.format(f['identifier'],f['amount'],f['log_time'],f['event']))
+    # print (datetime.strptime(f['log_time'],'%Y-%m-%dT%H:%M:%S.%f'))
 
-exit(0)
 
-counter = random.randrange(1,1000000000)
+payid = random.randrange(1,1000000000)
 while True:
     try:
         start = time.time()
-        s = node.pay(charger,1,node.token,counter)
+        #s = node.pay(charger,1,node.token,counter)
+        s = node.pay(charger,1,node.token,payid)
         end = time.time()
         print (end - start)
         # 409 conflict: If the address or the amount is invalid or if there is no path to the target, or if the identifier is already in use for a different payment.
@@ -42,7 +47,6 @@ while True:
             o = node.openchan(charger,getmaxcharge*priceperkwh)
             if o.status_code != 201:
                 break
-        counter += 1
     except KeyboardInterrupt:
         break
 
