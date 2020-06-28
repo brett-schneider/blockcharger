@@ -75,8 +75,8 @@ class rnode:
             ptarget = ''
         print ('{}/payments/{}{}'.format(self.endpoint,ptoken,ptarget))
         r = requests.get('{}/payments/{}{}'.format(self.endpoint,ptoken,ptarget))
-        print (r.status_code)
-        print (r.text)
+        # print (r.status_code)
+        # print (r.text)
         # self.dbg (r.status_code)
         # self.dbg (r.text)
         return r

@@ -2,18 +2,13 @@
 
 # geth --http --goerli --http.corsdomain="*" 
 
-import requests
 import json
 import time
+from datetime import datetime
 import random
+from raiden_api import rnode
 
-# this could go in a config file
-port = 5001
-endpoint = 'http://localhost:{}/api/v1'.format(port)
-r = requests.get('{}/address'.format(endpoint))
-d = json.loads(r.text)
-myaddress = d['our_address']
-print (myaddress)
+node = rnode(5001)
 
 def getmaxcharge(): #dummy for maximum chargeability
     return 20
@@ -23,51 +18,28 @@ charger = "0x961D954009Db8D9ab527632D7537411f3b3b8473" # node 3
 #charger = "0xE76Ba8dA05B3fdA938Cd76fC4A9D044d0ab45Cd9" # node 6
 priceperkwh = 300000000000000000 # 0.3 EBC
 factor = 1000000000000000000
-
-def pget(url):
-    print ('{}/{}'.format(endpoint,url))
-    r = requests.get('{}/{}'.format(endpoint,url))
-    print (r.status_code)
-    d = json.loads(r.text)
-    for p in d:
-        print (p)
-
-def pay(token, target, amount, id):
-    print ('{}/payments/{}/{}'.format(endpoint,token,target))
-    #print ({ 'amount': '{}'.format(amount), 'identifier': '{}'.format(id), })
-    print ({ 'amount': amount, 'identifier': id, })
-    r = requests.post('{}/payments/{}/{}'.format(endpoint,token,target), 
-        headers={ 'Content-Type': 'application/json', }, 
-        json={ 'amount': amount, 'identifier': id, })
-    print (r.status_code)
-    print (r.text)
-    return r
-
-def openchan(token,target):
-    c = requests.put('{}/channels'.format(endpoint,token,target), 
-        headers={ 'Content-Type': 'application/json', }, 
-        json={ 'partner_address': target
-            , 'reveal_timeout': '50'
-            , 'settle_timeout': '500'
-            , 'token_address': token
-            , 'total_deposit': getmaxcharge()*priceperkwh, })
-    print (c.status_code)
-    print (c.text)
-    return c
     
-#pget ('channels')
-pget ('channels/{}'.format(token))
+q = node.histpay()
+payhist = json.loads(q.text)
+print (type(payhist))
+
+for f in payhist:
+    print (f)
+    print (datetime.strptime(f['log_time'],'%Y-%m-%dT%H:%M:%S.%f'))
+
+exit(0)
+
 counter = random.randrange(1,1000000000)
 while True:
     try:
         start = time.time()
-        s = pay(token, charger, 1, counter)
+        s = node.pay(charger,1,node.token,counter)
         end = time.time()
         print (end - start)
         # 409 conflict: If the address or the amount is invalid or if there is no path to the target, or if the identifier is already in use for a different payment.
         if s.status_code == 409:   
             print ('409 encountered, opening channel')
-            o = openchan(token,charger)
+            o = node.openchan(charger,getmaxcharge*priceperkwh)
             if o.status_code != 201:
                 break
         counter += 1
@@ -82,7 +54,7 @@ while True:
 exit (0)
 
 start = time.time()
-pay (token, charger, 1, 100)
+node.pay (charger,1,node.token,100)
 end = time.time()
 print (end - start)
 
