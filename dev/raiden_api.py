@@ -14,6 +14,8 @@ class rnode:
             print(**kwargs)
 
     def __init__(self, port, endpoint=None, token=None):
+        address_key = "our_address"
+
         self.port = port
         if endpoint is not None:
             self.endpoint = endpoint
@@ -21,10 +23,16 @@ class rnode:
             self.endpoint = endpoint = "http://localhost:{}/api/v1".format(port)
         r = requests.get("{}/address".format(endpoint))
         d = json.loads(r.text)
-        self.address = d["our_address"]
-        self.token = token
+        try:
+            self.address = d["our_address"]
+        except KeyError as e:
+            print("Response from Raiden node does not contain {}: {}".format(address_key, d))
+            raise
+
         if token is None:
             self.token = "0xce4b48DF1E88DFd74da1963416a53bBA9cf3B2aE"
+        else:
+            self.token = token
 
     def pget(self, url):
         print("{}/{}".format(self.endpoint, url))
