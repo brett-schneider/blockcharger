@@ -12,6 +12,7 @@ import argparse
 # node 6: "0xE76Ba8dA05B3fdA938Cd76fC4A9D044d0ab45Cd9"
 DEFAULT_PROVIDER_ADDRESS = "0x961D954009Db8D9ab527632D7537411f3b3b8473"  # node 3
 DEFAULT_PRICE_FOR_KWH = 300000000000000000  # 0.3 EBC
+DEFAULT_CONSUMER_NODE_PORT = 5001
 
 
 def getmaxcharge():  # dummy for maximum chargeability
@@ -23,8 +24,8 @@ def parse_args():
     parser.add_argument(
         "--node-port",
         action="store",
-        default=5001,
-        help="set the port of the Raiden node to connect to (default: 5001)",
+        default=DEFAULT_CONSUMER_NODE_PORT,
+        help="set the port of the Raiden node to connect to (default: {}).format(DEFAULT_CONSUMER_NODE_PORT)",
     )
     parser.add_argument(
         "--provider-address",
