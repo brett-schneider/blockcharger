@@ -9,11 +9,13 @@ import random
 
 
 class rnode:
+    DEFAULT_TOKEN = "0xce4b48DF1E88DFd74da1963416a53bBA9cf3B2aE"
+
     def dbg(self, **kwargs):
         if self.dbglevel > 0:
             print(**kwargs)
 
-    def __init__(self, port, endpoint=None, token=None):
+    def __init__(self, port, endpoint=None, token=DEFAULT_TOKEN):
         address_key = "our_address"
 
         self.port = port
@@ -21,6 +23,8 @@ class rnode:
             self.endpoint = endpoint
         else:
             self.endpoint = endpoint = "http://localhost:{}/api/v1".format(port)
+        self.token = token
+
         r = requests.get("{}/address".format(endpoint))
         d = json.loads(r.text)
         try:
@@ -28,11 +32,6 @@ class rnode:
         except KeyError as e:
             print("Response from Raiden node does not contain {}: {}".format(address_key, d))
             raise
-
-        if token is None:
-            self.token = "0xce4b48DF1E88DFd74da1963416a53bBA9cf3B2aE"
-        else:
-            self.token = token
 
     def pget(self, url):
         print("{}/{}".format(self.endpoint, url))
