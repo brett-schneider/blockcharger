@@ -80,7 +80,7 @@ while True:
         # 409 conflict: If the address or the amount is invalid or if there is no path to the target, or if the identifier is already in use for a different payment.
         if s.status_code == 409:
             print("409 encountered, opening channel")
-            o = node.openchan(args.provider_address, getmaxcharge * priceperkwh)
+            o = node.openchan(args.provider_address, getmaxcharge() * priceperkwh)
             if o.status_code != 201:
                 break
     except KeyboardInterrupt:
