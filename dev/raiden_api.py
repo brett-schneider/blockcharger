@@ -16,8 +16,6 @@ class rnode:
             print(**kwargs)
 
     def __init__(self, port, endpoint=None, token=DEFAULT_TOKEN):
-        address_key = "our_address"
-
         self.port = port
         if endpoint is not None:
             self.endpoint = endpoint
@@ -30,7 +28,7 @@ class rnode:
         try:
             self.address = d["our_address"]
         except KeyError as e:
-            print("Response from Raiden node does not contain {}: {}".format(address_key, d))
+            print("Response from Raiden node does not contain {}: {}".format("our_address", d))
             raise
 
     def pget(self, url):
