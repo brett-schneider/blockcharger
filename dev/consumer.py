@@ -19,18 +19,17 @@ factor = 1000000000000000000
 def getmaxcharge():  # dummy for maximum chargeability
     return 20
 
+def parse_args():
+    parser = argparse.ArgumentParser(description="Run consumer simulation")
+    parser.add_argument(
+        "--node-port",
+        action="store",
+        default=5001,
+        help="set the port of the Raiden node to connect to (default: 5001)",
+    )
+    return parser.parse_args()
 
-parser = argparse.ArgumentParser(description="Run consumer simulation")
-parser.add_argument(
-    "--node-port",
-    action="store",
-    default=5001,
-    help="set the port of the Raiden node to connect to (default: 5001)",
-)
-
-args = parser.parse_args()
-print(args.node_port)
-
+args = parse_args()
 node = rnode(args.node_port)
 q = node.histpay()
 payhist = json.loads(q.text)
