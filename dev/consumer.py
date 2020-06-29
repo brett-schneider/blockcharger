@@ -29,11 +29,13 @@ def parse_args():
     )
     return parser.parse_args()
 
+# Parse commmand-line arguments.
 args = parse_args()
+# Connect to the Raiden node.
 node = rnode(args.node_port)
-q = node.histpay()
-payhist = json.loads(q.text)
-# print (type(payhist))
+# Query the node for the paymant history.
+query = node.histpay()
+payhist = json.loads(query.text)
 
 for f in payhist:
     if "identifier" not in f:
