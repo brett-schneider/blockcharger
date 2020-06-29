@@ -9,13 +9,14 @@ import random
 from raiden_api import rnode
 import argparse
 
-charger = "0x961D954009Db8D9ab527632D7537411f3b3b8473"  # node 3
-# charger = "0xE76Ba8dA05B3fdA938Cd76fC4A9D044d0ab45Cd9" # node 6
-priceperkwh = 300000000000000000  # 0.3 EBC
+# node 6: "0xE76Ba8dA05B3fdA938Cd76fC4A9D044d0ab45Cd9"
+DEFAULT_PROVIDER_ADDRESS = "0x961D954009Db8D9ab527632D7537411f3b3b8473"  # node 3
+DEFAULT_PRICE_FOR_KWH = 300000000000000000  # 0.3 EBC
 
 
 def getmaxcharge():  # dummy for maximum chargeability
     return 20
+
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run consumer simulation")
@@ -25,7 +26,24 @@ def parse_args():
         default=5001,
         help="set the port of the Raiden node to connect to (default: 5001)",
     )
+    parser.add_argument(
+        "--provider-address",
+        action="store",
+        default=DEFAULT_PROVIDER_ADDRESS,
+        help="set the ETH address of the provider (default: {})".format(
+            DEFAULT_PROVIDER_ADDRESS
+        ),
+    )
+    parser.add_argument(
+        "--price-per-kwh",
+        action="store",
+        default=DEFAULT_PRICE_FOR_KWH,
+        help="set the default price for kWh (default: {})".format(
+            DEFAULT_PRICE_FOR_KWH
+        ),
+    )
     return parser.parse_args()
+
 
 # Parse commmand-line arguments.
 args = parse_args()
@@ -35,6 +53,7 @@ node = rnode(args.node_port)
 query = node.histpay()
 payhist = json.loads(query.text)
 
+# XXX: What is happening here?
 for f in payhist:
     if "identifier" not in f:
         f["identifier"] = "0"
@@ -48,19 +67,19 @@ for f in payhist:
     )
     # print (datetime.strptime(f['log_time'],'%Y-%m-%dT%H:%M:%S.%f'))
 
-
+priceperkwh = args.price_per_kwh
 payid = random.randrange(1, 1000000000)
 while True:
     try:
         start = time.time()
-        # s = node.pay(charger,1,node.token,counter)
-        s = node.pay(charger, 1, node.token, payid)
+        # s = node.pay(args.provider_address,1,node.token,counter)
+        s = node.pay(args.provider_address, 1, node.token, payid)
         end = time.time()
         print(end - start)
         # 409 conflict: If the address or the amount is invalid or if there is no path to the target, or if the identifier is already in use for a different payment.
         if s.status_code == 409:
             print("409 encountered, opening channel")
-            o = node.openchan(charger, getmaxcharge * priceperkwh)
+            o = node.openchan(args.provider_address, getmaxcharge * priceperkwh)
             if o.status_code != 201:
                 break
     except KeyboardInterrupt:
@@ -74,7 +93,7 @@ while True:
 exit(0)
 
 start = time.time()
-node.pay(charger, 1, node.token, 100)
+node.pay(args.provider_address, 1, node.token, 100)
 end = time.time()
 print(end - start)
 
