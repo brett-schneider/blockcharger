@@ -8,19 +8,17 @@ from datetime import datetime
 import random
 from raiden_api import rnode
 
-node = rnode(5001)
-
-
-def getmaxcharge():  # dummy for maximum chargeability
-    return 20
-
-
 token = "0xce4b48DF1E88DFd74da1963416a53bBA9cf3B2aE"
 charger = "0x961D954009Db8D9ab527632D7537411f3b3b8473"  # node 3
 # charger = "0xE76Ba8dA05B3fdA938Cd76fC4A9D044d0ab45Cd9" # node 6
 priceperkwh = 300000000000000000  # 0.3 EBC
 factor = 1000000000000000000
 
+def getmaxcharge():  # dummy for maximum chargeability
+    return 20
+
+
+node = rnode(5001)
 q = node.histpay()
 payhist = json.loads(q.text)
 # print (type(payhist))
