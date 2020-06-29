@@ -10,10 +10,15 @@ venv:
 	virtualenv --python=python3.8 "$(VENV_DIR)"
 	$(PIP) install -r requirements.txt
 
-# Run demo.
-.PHONY: demo
-demo:
-	$(PYTHON) dev/demo.py
+# Run the consumer.
+.PHONY: consumer
+consumer:
+	$(PYTHON) dev/consumer.py
+
+# Run the producer.
+.PHONY: provider
+provider:
+	$(PYTHON) dev/provider.py
 
 # Open a shell in the container running Raiden node.
 .PHONY: raiden1_shell
