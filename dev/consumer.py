@@ -7,6 +7,7 @@ import time
 from datetime import datetime
 import random
 from raiden_api import rnode
+import argparse
 
 token = "0xce4b48DF1E88DFd74da1963416a53bBA9cf3B2aE"
 charger = "0x961D954009Db8D9ab527632D7537411f3b3b8473"  # node 3
@@ -14,11 +15,23 @@ charger = "0x961D954009Db8D9ab527632D7537411f3b3b8473"  # node 3
 priceperkwh = 300000000000000000  # 0.3 EBC
 factor = 1000000000000000000
 
+
 def getmaxcharge():  # dummy for maximum chargeability
     return 20
 
 
-node = rnode(5001)
+parser = argparse.ArgumentParser(description="Run consumer simulation")
+parser.add_argument(
+    "--node-port",
+    action="store",
+    default=5001,
+    help="set the port of the Raiden node to connect to (default: 5001)",
+)
+
+args = parser.parse_args()
+print(args.node_port)
+
+node = rnode(args.node_port)
 q = node.histpay()
 payhist = json.loads(q.text)
 # print (type(payhist))
