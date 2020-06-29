@@ -53,7 +53,7 @@ node = rnode(args.node_port)
 query = node.histpay()
 payhist = json.loads(query.text)
 
-# XXX: What is happening here?
+# Print the payment history for debugging purposes.
 for f in payhist:
     if "identifier" not in f:
         f["identifier"] = "0"
