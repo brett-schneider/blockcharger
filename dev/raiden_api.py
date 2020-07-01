@@ -24,7 +24,7 @@ class rnode:
         try:
             self.address = d["our_address"]
         except KeyError as e:
-            print("Response from Raiden node does not contain {}: {}".format("our_address", d))
+            print("Response from Raiden node does not contain {}: {}".format("our_address", e))
             raise
 
     def pget(self, url):
@@ -58,7 +58,7 @@ class rnode:
         if ptoken is None:
             ptoken = self.token
         c = requests.put(
-            "{}/channels".format(self.endpoint, ptoken, target),
+            "{}/channels".format(self.endpoint),
             headers={"Content-Type": "application/json",},
             json={
                 "partner_address": target,
