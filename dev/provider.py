@@ -82,6 +82,9 @@ def client_delete():
 # receive meter stuff TODO
 @app.route('/meter', methods=['PUT'])
 def meter_put():
+    # balance/ pending payments
+    # stopmeter if whoopie
+    # what abt restarts when more payment arrives
     return json.dumps ({ 'status': 'OK', })
 
 
