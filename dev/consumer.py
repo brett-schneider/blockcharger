@@ -19,8 +19,10 @@ charger = "0x961D954009Db8D9ab527632D7537411f3b3b8473" # node 3
 priceperkwh = 300000000000000000 # 0.3 EBC
 factor = 1000000000000000000
     
-q = node.histpay()
-payhist = json.loads(q.text)
+payhist = node.histpay(id = 2)
+print (payhist)
+if payhist == []:
+    print ("leere payhist")
 # print (type(payhist))
 
 for f in payhist:
@@ -32,6 +34,7 @@ for f in payhist:
     print ('{}: {} at {} :: {}'.format(f['identifier'],f['amount'],f['log_time'],f['event']))
     # print (datetime.strptime(f['log_time'],'%Y-%m-%dT%H:%M:%S.%f'))
 
+exit (0)
 
 payid = random.randrange(1,1000000000)
 while True:

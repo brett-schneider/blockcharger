@@ -51,7 +51,7 @@ class rnode:
         ptoken = token
         if ptoken is None:
             ptoken = self.token
-        c = requests.put('{}/channels'.format(self.endpoint,ptoken,target), 
+        c = requests.put('{}/channels'.format(self.endpoint), 
             headers={ 'Content-Type': 'application/json', }, 
             json={ 'partner_address': target
                 , 'reveal_timeout': '50'
@@ -79,7 +79,11 @@ class rnode:
         # print (r.text)
         # self.dbg (r.status_code)
         # self.dbg (r.text)
-        return r
+        jr = json.loads(r.text)
+        if id is not None:
+            jr = [ x for x in jr if 'identifier' in x ]
+            jr = [ x for x in jr if x['identifier'] == '{}'.format(id) ]
+        return jr
 
     def registertoken(self,token = None):
         r = requests.put('{}/tokens/{}'.format(self.endpoint,token))
@@ -87,4 +91,4 @@ class rnode:
     
     def listchan(self,token = None,target = None):
         # no defaulting, because none -> all channels for all tokens
-        return pget(self,'/channels/{}/{}'.format(token,target))
+        return self.pget(self,'/channels/{}/{}'.format(token,target))
