@@ -1,6 +1,8 @@
 VENV_DIR=	./venv
 PIP=		$(VENV_DIR)/bin/pip
 PYTHON=		$(VENV_DIR)/bin/python
+RNODE_2_ADDRESS=	0x37275F6314cAA14dE6A2D5332709f97d89ef162F
+RNODE_2_PORT=		5002
 
 # Initialize the virtual environment for Python and install required
 # dependencies.
@@ -10,10 +12,15 @@ venv:
 	virtualenv --python=python3.8 "$(VENV_DIR)"
 	$(PIP) install -r requirements.txt
 
-# Run demo.
-.PHONY: demo
-demo:
-	$(PYTHON) dev/demo.py
+# Run the consumer.
+.PHONY: consumer
+consumer:
+	$(PYTHON) dev/consumer.py --provider-address ${RNODE_2_ADDRESS}
+
+# Run the producer.
+.PHONY: provider
+provider:
+	$(PYTHON) dev/provider.py --node-port ${RNODE_2_PORT}
 
 # Open a shell in the container running Raiden node.
 .PHONY: raiden1_shell

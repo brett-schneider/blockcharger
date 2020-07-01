@@ -4,12 +4,40 @@ from raiden_api import rnode
 from flask import Flask
 import json
 import random
+import argparse
 
-node = rnode(5006)
-#payhist = node.histpay()
+DEFAULT_PROVIDER_NODE_PORT = 5006
+DEFAULT_PRICE_FOR_KWH = 300000000000000000  # 0.3 EBC
+
+def parse_args():
+    parser = argparse.ArgumentParser(description="Run provider simulation")
+    parser.add_argument(
+        "--node-port",
+        action="store",
+        default=DEFAULT_PROVIDER_NODE_PORT,
+        help="set the port of the Raiden node to connect to (default: {})".format(
+            DEFAULT_PROVIDER_NODE_PORT
+        ),
+    )
+    parser.add_argument(
+        "--price-per-kwh",
+        action="store",
+        default=DEFAULT_PRICE_FOR_KWH,
+        help="set the default price for kWh (default: {})".format(
+            DEFAULT_PRICE_FOR_KWH
+        ),
+    )
+    return parser.parse_args()
+
+
+# Parse commmand-line arguments.
+args = parse_args()
+
+node = rnode(args.node_port)
 
 conf = { 'priceperkwh': 300000000000000000,
         'maxkw': 25, 
+        'address' : node.address
          }
 
 payid = 0
