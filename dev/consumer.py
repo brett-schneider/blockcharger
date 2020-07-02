@@ -8,10 +8,11 @@ from datetime import datetime
 import random
 from raiden_api import rnode
 import argparse
+import requests
 
 # node 6: "0xE76Ba8dA05B3fdA938Cd76fC4A9D044d0ab45Cd9"
-DEFAULT_PROVIDER_ADDRESS = "0x961D954009Db8D9ab527632D7537411f3b3b8473"  # node 3
-DEFAULT_PRICE_FOR_KWH = 300000000000000000  # 0.3 EBC
+DEFAULT_PROVIDER_ADDRESS = "localhost:5000"  # node 3
+# DEFAULT_PRICE_FOR_KWH = 300000000000000000  # 0.3 EBC
 DEFAULT_CONSUMER_NODE_PORT = 5001
 
 
@@ -32,14 +33,6 @@ def parse_args():
         default=DEFAULT_PROVIDER_ADDRESS,
         help="set the ETH address of the provider (default: {})".format(
             DEFAULT_PROVIDER_ADDRESS
-        ),
-    )
-    parser.add_argument(
-        "--price-per-kwh",
-        action="store",
-        default=DEFAULT_PRICE_FOR_KWH,
-        help="set the default price for kWh (default: {})".format(
-            DEFAULT_PRICE_FOR_KWH
         ),
     )
     return parser.parse_args()
@@ -66,19 +59,27 @@ for f in payhist:
     )
     # print (datetime.strptime(f['log_time'],'%Y-%m-%dT%H:%M:%S.%f'))
 
-priceperkwh = args.price_per_kwh
+# connect to charger
+r = requests.get(args.provider_address)
+jr = json.loads(r.text)
+provider = jr['address']
+priceperkwh = jr['priceperkwh']
+chargemaxkwh = jr['maxkw']
+
+exit (0)
+
+# TODO: charger will provide payid
 payid = random.randrange(1, 1000000000)
 while True:
     try:
         start = time.time()
-        # s = node.pay(args.provider_address,1,node.token,counter)
-        s = node.pay(args.provider_address, 1, node.token, payid)
+        s = node.pay(provider, 1, node.token, payid)
         end = time.time()
         print(end - start)
         # 409 conflict: If the address or the amount is invalid or if there is no path to the target, or if the identifier is already in use for a different payment.
         if s.status_code == 409:
             print("409 encountered, opening channel")
-            o = node.openchan(args.provider_address, getmaxcharge() * priceperkwh)
+            o = node.openchan(provider, getmaxcharge() * priceperkwh)
             if o.status_code != 201:
                 break
     except KeyboardInterrupt:
@@ -92,7 +93,7 @@ while True:
 exit(0)
 
 start = time.time()
-node.pay(args.provider_address, 1, node.token, 100)
+node.pay(provider, 1, node.token, 100)
 end = time.time()
 print(end - start)
 
