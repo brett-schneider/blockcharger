@@ -8,7 +8,7 @@ from raiden_api import rnode
 import argparse
 import requests
 
-DEFAULT_PROVIDER_ADDRESS = "localhost:5000"  # node 3
+DEFAULT_PROVIDER_ADDRESS = "http://localhost:5000"  # node 3
 DEFAULT_CONSUMER_NODE_PORT = 5001
 
 def getmaxcharge():  # dummy for maximum chargeability
@@ -39,20 +39,24 @@ node = rnode(args.node_port)
 
 # PAUSE: consumer is set up, ready to connect
 # connect to charger and query price etc
-r = requests.get(args.provider_address)
+r = requests.get('{}/client'.format(args.provider_address))
+if r.status_code != 200:
+    exit (r.status_code)
 jr = json.loads(r.text)
 provider = jr['address']
 priceperkwh = jr['priceperkwh']
 chargemaxkwh = jr['maxkw']
 
 # PAUSE: consumer decides to charge
-r = requests.put(args.provider_address)
+r = requests.put('{}/client'.format(args.provider_address))
+if r.status_code != 200:
+    print (r._content)
+    exit (r.status_code)
 jr = json.loads(r.text)
 payid = jr['identifier']
 
 #dbg:
-print (r.text)
-print ('payid: '.format(payid))
+print ('payid: {}'.format(payid))
 exit (0)
 
 while True:  #

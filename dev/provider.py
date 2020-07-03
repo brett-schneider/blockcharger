@@ -67,7 +67,7 @@ def client_put():
         payid += 1
         q = node.histpay(id = payid)
     # return payid to consumer
-    meter = startmeter()
+    # meter = startmeter()
     return json.dumps ({ 'identifier': payid, })
 
 @app.route('/client', methods=['DELETE'])
