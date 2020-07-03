@@ -1,7 +1,5 @@
 #!/usr/local/opt/python@3.8/bin/python3
 
-# geth --http --goerli --http.corsdomain="*"
-
 import json
 import time
 from datetime import datetime
@@ -10,11 +8,8 @@ from raiden_api import rnode
 import argparse
 import requests
 
-# node 6: "0xE76Ba8dA05B3fdA938Cd76fC4A9D044d0ab45Cd9"
 DEFAULT_PROVIDER_ADDRESS = "localhost:5000"  # node 3
-# DEFAULT_PRICE_FOR_KWH = 300000000000000000  # 0.3 EBC
 DEFAULT_CONSUMER_NODE_PORT = 5001
-
 
 def getmaxcharge():  # dummy for maximum chargeability
     return 20
@@ -37,40 +32,30 @@ def parse_args():
     )
     return parser.parse_args()
 
-
 # Parse commmand-line arguments.
 args = parse_args()
 # Connect to the Raiden node.
 node = rnode(args.node_port)
-# Query the node for the paymant history.
-payhist = node.histpay()
 
-# Print the payment history for debugging purposes.
-for f in payhist:
-    if "identifier" not in f:
-        f["identifier"] = "0"
-    if "amount" not in f:
-        f["amount"] = "0"
-    # print (f)
-    print(
-        "{}: {} at {} :: {}".format(
-            f["identifier"], f["amount"], f["log_time"], f["event"]
-        )
-    )
-    # print (datetime.strptime(f['log_time'],'%Y-%m-%dT%H:%M:%S.%f'))
-
-# connect to charger
+# PAUSE: consumer is set up, ready to connect
+# connect to charger and query price etc
 r = requests.get(args.provider_address)
 jr = json.loads(r.text)
 provider = jr['address']
 priceperkwh = jr['priceperkwh']
 chargemaxkwh = jr['maxkw']
 
+# PAUSE: consumer decides to charge
+r = requests.put(args.provider_address)
+jr = json.loads(r.text)
+payid = jr['identifier']
+
+#dbg:
+print (r.text)
+print ('payid: '.format(payid))
 exit (0)
 
-# TODO: charger will provide payid
-payid = random.randrange(1, 1000000000)
-while True:
+while True:  #
     try:
         start = time.time()
         s = node.pay(provider, 1, node.token, payid)
