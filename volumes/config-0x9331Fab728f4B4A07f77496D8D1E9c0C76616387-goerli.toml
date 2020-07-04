@@ -1,0 +1,16 @@
+environment-type = "development"
+keystore-path = "/Users/brett/Library/Ethereum/keystore"
+keystore-file-path = "/Users/brett/Library/Ethereum/keystore/UTC--2020-06-27T11-18-10Z--a30f7b74-06cf-438a-a2ad-fb379405922a"
+address = "0x9331Fab728f4B4A07f77496D8D1E9c0C76616387"
+password-file = "/Users/brett/.local/share/raiden/0x9331Fab728f4B4A07f77496D8D1E9c0C76616387.passphrase.txt"
+user-deposit-contract-address = "0x0794F09913AA8C77C8c5bdd1Ec4Bb51759Ee0cC5"
+network-id = "goerli"
+accept-disclaimer = true
+#eth-rpc-endpoint = "https://goerli.infura.io:443/v3/44e91c40827a4a7081e22c55b4a2ae50"
+eth-rpc-endpoint = "http://localhost:8545"
+routing-mode = "pfs"
+enable-monitoring = true
+#pathfinding-service-address = "https://pfs-goerli.services-dev.raiden.network"
+pathfinding-service-address = "https://pfs-goerli-with-fee.services-dev.raiden.network"
+api-address = "localhost:5005"
+
