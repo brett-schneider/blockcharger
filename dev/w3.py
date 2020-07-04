@@ -21,10 +21,7 @@ pp.pprint(smartcontract.functions)
 
 print("nonce: ", nonce)
 print("get():")
-print(smartcontract.functions)
-print(smartcontract.functions.registerProvider().call())
-
-temp = smartcontract.functions.registerProvider({})
+temp = smartcontract.functions.registerProvider(our_address, "fghj")
 
 txn = temp.buildTransaction(
     {
@@ -40,5 +37,7 @@ private_key = "D5228D9892AB6DEAE3696CA941AA2B6018D9929136B14AFAE8F9F12C6956F326"
 signed_txn = w3.eth.account.sign_transaction(txn, private_key=private_key)
 print()
 print(signed_txn.hash)
+print()
 print(w3.eth.sendRawTransaction(signed_txn.rawTransaction))
+print()
 print(w3.toHex(w3.keccak(signed_txn.rawTransaction)))
