@@ -10,34 +10,34 @@
 
 Start the virtual machine:
 
-```console
-you@host$ vagrant up
+```sh
+vagrant up
 ```
 
 Log into the VM:
 
-```console
-you@host$ vagrant ssh
+```sh
+vagrant ssh
 ```
 
 #### Geth and Raiden nodes
 
 It might be necessary to start a Raiden node a little bit later than Geth. In that case run the following in two separate terminals:
 
-```console
-vagrant@vm:/vagrant$ docker-compose up geth
+```sh
+docker-compose up geth
 ```
 
-```console
-vagrant@vm:/vagrant$ docker-compose up raiden1
+```sh
+docker-compose up raiden1
 ```
 
 #### Python
 
 Install the virtual environment and dependencies:
 
-```console
-vagrant@vm:/vagrant$ make venv
+```sh
+make venv
 ```
 
 Activate the Python environment:
