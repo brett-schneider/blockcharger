@@ -32,7 +32,7 @@ Vagrant.configure("2") do |config|
     apt-get install -y docker.io docker-compose
 
     # Install Python tooling.
-    apt-get install -y python3.8 virtualenv
+    apt-get install -y python3.8 python3.8-dev virtualenv
 
     # Set an appropriate timezone.
     timedatectl set-timezone Europe/Berlin
