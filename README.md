@@ -32,7 +32,7 @@ vagrant@vm:/vagrant$ docker-compose up geth
 vagrant@vm:/vagrant$ docker-compose up raiden1
 ```
 
-#### demo.py
+#### Python
 
 Install the virtual environment and dependencies:
 
@@ -40,10 +40,10 @@ Install the virtual environment and dependencies:
 vagrant@vm:/vagrant$ make venv
 ```
 
-Run demo.py:
+Activate the Python environment:
 
-```console
-vagrant@vm:/vagrant$ make demo
+```sh
+source ./venv/bin/activate
 ```
 
 ### Caveats
