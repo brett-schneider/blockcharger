@@ -14,7 +14,7 @@ contract Registration {
     // Provider[] public energy_providers;
 
 
-    constructor() internal {
+    constructor() public {
         numProviders = 0;
     }
 
