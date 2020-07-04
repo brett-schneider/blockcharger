@@ -10,47 +10,40 @@
 
 Start the virtual machine:
 
-```console
-you@host$ vagrant up
+```sh
+vagrant up
 ```
 
 Log into the VM:
 
-```console
-you@host$ vagrant ssh
+```sh
+vagrant ssh
 ```
 
 #### Geth and Raiden nodes
 
-Start Geth and Raiden nodes:
-
-```console
-vagrant@vm:~$ cd /vagrant
-vagrant@vm:/vagrant$ sudo docker-compose up geth raiden1
-```
-
 It might be necessary to start a Raiden node a little bit later than Geth. In that case run the following in two separate terminals:
 
-```console
-vagrant@vm:/vagrant$ sudo docker-compose up geth
+```sh
+docker-compose up geth
 ```
 
-```console
-vagrant@vm:/vagrant$ sudo docker-compose up raiden1
+```sh
+docker-compose up raiden1
 ```
 
-#### demo.py
+#### Python
 
 Install the virtual environment and dependencies:
 
-```console
-vagrant@vm:/vagrant$ make venv
+```sh
+make venv
 ```
 
-Run demo.py:
+Activate the Python environment:
 
-```console
-vagrant@vm:/vagrant$ make demo
+```sh
+source ./venv/bin/activate
 ```
 
 ### Caveats
