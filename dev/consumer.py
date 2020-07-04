@@ -7,12 +7,33 @@ import random
 from raiden_api import rnode
 import argparse
 import requests
+from math import ceil
 
 DEFAULT_PROVIDER_ADDRESS = "http://localhost:5000"  # node 3
 DEFAULT_CONSUMER_NODE_PORT = 5001
 
 def getmaxcharge():  # dummy for maximum chargeability
     return 20
+
+def getmaxspeed():  # dummy for max charge speed
+    return 15
+
+def getunitpay(speed, price, paypersec = None):
+    if paypersec is None:
+        # default: 5 payments per second
+        paypersec = 5
+    # actual unit of payment
+    iup = int(speed*price/paypersec/3600)
+    # may result in inaccurate decimal representation
+    mu = iup/price
+    # take two most significant digits of measuring unit
+    mux = 0
+    for i in range(100):
+        if ceil(mu*10**i) >= 10:
+            mux = i
+            break
+    # return those times price so no rounding errors
+    return price*(ceil(mu*10**mux))/10**mux
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run consumer simulation")
@@ -45,7 +66,7 @@ if r.status_code != 200:
 jr = json.loads(r.text)
 provider = jr['address']
 priceperkwh = jr['priceperkwh']
-chargemaxkwh = jr['maxkw']
+chargemaxkw = jr['maxkw']
 
 # PAUSE: consumer decides to charge
 r = requests.put('{}/client'.format(args.provider_address))
@@ -56,13 +77,19 @@ jr = json.loads(r.text)
 payid = jr['identifier']
 
 #dbg:
-print ('payid: {}'.format(payid))
+print ('recieved payid from charger: {}'.format(payid))
+chargespeed = min(chargemaxkw, getmaxspeed())
+unitpay = getunitpay(chargespeed, priceperkwh)
+print ('chargespeed: {}'.format(chargespeed))
+print ('unitpay: {}'.format(unitpay))
+meterunit = unitpay/priceperkwh
+print ('meterunit: {} kWh'.format(meterunit))
 exit (0)
 
-while True:  #
+while True: 
     try:
         start = time.time()
-        s = node.pay(provider, 1, node.token, payid)
+        s = node.pay(provider, unitpay, node.token, payid)
         end = time.time()
         print(end - start)
         # 409 conflict: If the address or the amount is invalid or if there is no path to the target, or if the identifier is already in use for a different payment.

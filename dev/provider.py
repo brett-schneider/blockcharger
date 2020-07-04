@@ -87,5 +87,4 @@ def meter_put():
     # what abt restarts when more payment arrives
     return json.dumps ({ 'status': 'OK', })
 
-
 app.run()
