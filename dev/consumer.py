@@ -75,44 +75,21 @@ args = parse_args()
 # Connect to the Raiden node.
 node = rnode(args.node_port)
 
-# PAUSE: consumer is set up, ready to connect
-# connect to charger and query price etc
-r = requests.get('{}/client'.format(args.provider_address))
-if r.status_code != 200:
-    exit (r.status_code)
-jr = json.loads(r.text)
-provider = jr['address']
-priceperkwh = jr['priceperkwh']
-chargemaxkw = jr['maxkw']
-
-# PAUSE: consumer decides to charge
-r = requests.put('{}/client'.format(args.provider_address))
-if r.status_code != 200:
-    print (r._content)
-    print ('error: {}'.format(r.status_code))
-    exit (r.status_code)
-jr = json.loads(r.text)
-payid = jr['identifier']
-
-#dbg:
-print ('recieved payid from charger: {}'.format(payid))
-chargespeed = min(chargemaxkw, getmaxspeed())
-unitpay = getunitpay(chargespeed, priceperkwh)
-print ('chargespeed: {}'.format(chargespeed))
-print ('unitpay: {}'.format(unitpay))
-meterunit = unitpay/priceperkwh
-print ('meterunit: {} kWh'.format(meterunit))
-for key,val in node.lastpay().items():
-    print ('{}: {}'.format(key,val))
-
-# commence charge
-
 from werkzeug.serving import make_server
 import threading
 from flask import Flask
+from flask import request
 from logging import Logger
 log = Logger(__name__)
 
+startmeter = 0.0
+provider = None
+priceperkwh = None
+chargemaxkw = None
+chargespeed = None
+unitpay = None
+meterunit = None
+payid = None
 class ServerThread(threading.Thread):
 
     def __init__(self, app):
@@ -135,16 +112,30 @@ def stop_server():
 def start_server():
     global server
     app = Flask('myapp')
-    @app.route('/', methods=['GET'])
-    def home_get():
+    @app.route('/', methods=['POST'])
+    def home_post():
+        d = json.loads(request.json)
+        # for k,v in d.items():
+        #     print ('{}: {}'.format(k,v))
+        meter = d['meter']
+        #Vprint('payid: {}'.format(payid))
         node.pay(provider, unitpay, node.token, id=payid)
         balance = node.getbalance(payid)
-        
+        # r = requests.get(args.meter_address)
+        # meter = json.loads(r.text)['meter']
+        print ('meter: {} :: startmeter: {} :: priceperkwh: {}'.format(meter, startmeter, priceperkwh))
+        balancemeter = (meter - startmeter) * priceperkwh
+        print ('balance: {}, meter: {:.5f}, startmeter: {:.5f}, balance-by-meter: {}'.format(balance,meter,startmeter,int(balancemeter)))
+        if abs(balance - balancemeter) > unitpay * 2:
+            print('abort: balances differ by {}, max {}'.format(abs(balance - balancemeter),unitpay*2))
+            requests.delete(args.meter_address)
         return "<h1>meter ping received</h1>"
-    @app.route('/', methods=['DELETE'])
-    def home_delete():
-        stop_server()
-        return "<h1>finished charging</h1>"
+    # @app.route('/', methods=['DELETE'])
+    # def home_delete():
+    #     print('stop charge received')
+    #     requests.delete(args.meter_address)
+    #     # stop_server()
+    #     return "<h1>finished charging</h1>"
     server = ServerThread(app)
     server.start()
     log.info('server started')
@@ -152,17 +143,86 @@ def start_server():
 from time import sleep
 start_server()
 print('server started')
-chargedict = {}
-chargedict['meterunit'] = meterunit
-chargedict['chargespeed'] = chargespeed
-chargedict['consumerurl'] = "http://localhost:{}/".format(args.payment_port)
-chargedict['payid'] = payid
-#data = '{ "meterunit": ' + '{}'.format(meterunit) + ',  "chargespeed": ' + '{}'.format(chargespeed) + ', "consumerurl": "http://localhost:' + str(args.payment_port) + '/" }'
-data = json.dumps(chargedict)
-r = requests.get(args.meter_address)
-meter = json.loads(r.text)['meter']
-print('requesting charge')
-r = requests.put(args.meter_address,data=json.dumps(data),headers = {"Content-Type": "application/json"})
+
+# PAUSE: consumer is set up, ready to connect
+# connect to charger and query price etc
+def connectcharger():
+    r = requests.get('{}/client'.format(args.provider_address))
+    if r.status_code != 200:
+        exit (r.status_code)
+    jr = json.loads(r.text)
+    # provider = jr['address']
+    # priceperkwh = jr['priceperkwh']
+    # chargemaxkw = jr['maxkw']
+    return jr
+
+# PAUSE: consumer decides to charge
+def begincharge(meterunit,chargespeed):
+    global payid, startmeter
+    r = requests.put('{}/client'.format(args.provider_address))
+    if r.status_code != 200:
+        print (r._content)
+        print ('error: {}'.format(r.status_code))
+        exit (r.status_code)
+    jr = json.loads(r.text)
+    payid = jr['identifier']
+    chargedict = {}
+    chargedict['meterunit'] = meterunit
+    chargedict['chargespeed'] = chargespeed
+    chargedict['consumerurl'] = "http://localhost:{}/".format(args.payment_port)
+    chargedict['payid'] = payid
+    chargedict['providerurl'] = args.provider_address
+    chargedict['unitpay'] = unitpay
+    data = json.dumps(chargedict)
+    r = requests.get(args.meter_address)
+    startmeter = json.loads(r.text)['meter']
+    print('requesting charge, payid: {}'.format(payid))
+    requests.put(args.meter_address,data=json.dumps(data),headers = {"Content-Type": "application/json"})
+    print ('charge request ended')
+    return (payid,startmeter)
+
+while True:
+    try:
+        print ('1: connect charger')
+        print ('2: disconnect charger')
+        print ('3: begin charge')
+        key = input()
+        if key == '1':
+            x = connectcharger()
+            provider = x['address']
+            priceperkwh = x['priceperkwh']
+            chargemaxkw = x['maxkw']
+            chargespeed = min(chargemaxkw, getmaxspeed())
+            unitpay = getunitpay(chargespeed, priceperkwh)
+            meterunit = unitpay/priceperkwh
+            print ('chargespeed: {}'.format(chargespeed))
+            print ('unitpay: {}'.format(unitpay))
+            print ('meterunit: {} kWh'.format(meterunit))
+        elif key == '2':
+            if provider is None:
+                print ('not connected')
+            else:
+                provider = None
+                priceperkwh = None
+                chargemaxkw = None
+        elif key == '3':
+            if provider is None:
+                print ('not connected')
+            else:
+                (payid,startmeter) = begincharge(meterunit,chargespeed)
+                # print ('recieved payid from charger: {}'.format(payid))
+    except KeyboardInterrupt:
+        break
+stop_server()
+exit(0)
+
+#dbg:
+print ('last payments on targets (charger busy?)')
+for key,val in node.lastpay().items():
+    print ('{}: {}'.format(key,val))
+
+# commence charge
+
 print('monitor charge')
 (m,n) = (0.0,0.0)
 print('server started')

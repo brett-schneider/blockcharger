@@ -2,6 +2,7 @@
 
 from raiden_api import rnode
 from flask import Flask
+from flask import request
 import json
 import random
 import argparse
@@ -9,6 +10,7 @@ import requests
 
 DEFAULT_PROVIDER_NODE_PORT = 5006
 DEFAULT_PRICE_FOR_KWH = 300000000000000000  # 0.3 EBC
+DEFAULT_METER_ADDRESS = 'localhost:5200'
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Run provider simulation")
@@ -28,18 +30,19 @@ def parse_args():
             DEFAULT_PRICE_FOR_KWH
         ),
     )
+    parser.add_argument(
+        "--meter-address",
+        action="store",
+        default=DEFAULT_METER_ADDRESS,
+        help="set meter address (default: {})".format(
+            DEFAULT_METER_ADDRESS
+        ),
+    )
     return parser.parse_args()
 
 # Parse commmand-line arguments.
 args = parse_args()
 node = rnode(args.node_port)
-def startmeter():
-    return requests.put(meterurl)
-def stopmeter():
-    return requests.delete(meterurl)
-
-# consts
-meterurl = 'localhost:5200'
 
 conf = { 'priceperkwh': 300000000000000000,
         'maxkw': 25, 
@@ -59,6 +62,7 @@ def client_get():
 # initiate charge
 @app.route('/client', methods=['PUT'])
 def client_put():
+    global payid
     # find unused payid
     payid = random.randrange(1,1000000000)
     q = node.histpay(id = payid)
@@ -69,18 +73,23 @@ def client_put():
     # meter = startmeter()
     return json.dumps ({ 'identifier': payid, })
 
-@app.route('/client', methods=['DELETE'])
-def client_delete():
-    # get payment history
-    q = node.histpay(id = payid)
-    final = stopmeter()
-    print ((meter - final) * conf['priceperkwh'])
-    # TODO: final balance
-    return json.dumps ({ 'identifier': payid, 'status': 'terminated', })
-
 # receive meter stuff TODO
-@app.route('/meter', methods=['PUT'])
-def meter_put():
+@app.route('/meter', methods=['POST'])
+def meter_post():
+    d = json.loads(request.json)
+    # for key,val in d.items():
+    #     print ('{}: {}'.format(key,val))
+    meter = d['meter']
+    startmeter = d['startmeter']
+    unitpay = d['unitpay']
+    balancemeter = (meter - startmeter) * args.price_per_kwh
+    balance = node.getbalance(payid)
+    print ('balance: {}, meter: {:.5f}, startmeter: {:.5f}, balance-by-meter: {}'.format(balance,meter,startmeter,int(balancemeter)))
+    if abs(balance - balancemeter) > unitpay * 2:
+        print('abort: balances differ by {}, max {}'.format(abs(balance - balancemeter),unitpay*2))
+        requests.delete(args.meter_address)
+
+    
     # balance/ pending payments
     # stopmeter if whoopie
     # what abt restarts when more payment arrives

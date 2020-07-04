@@ -17,7 +17,7 @@ app = Flask(__name__)
 @app.route('/', methods=['GET'])
 def home_get():
     global meter
-    return { "meter": meter}
+    return { "meter": meter }
 
 @app.route('/', methods=['PUT'])
 def home_put():
@@ -31,12 +31,22 @@ def home_put():
     active = 1
     consumerurl = d['consumerurl']
     meterunit = d['meterunit']
+    providerurl = d['providerurl']
+    startmeter = meter
     while active == 1:
-        r = requests.get(consumerurl)
         # print(r.text)
         meter += meterunit
         print ('meter: {}'.format(meter))
+        jparm = {}
+        jparm['meter'] = meter
+        jparm['startmeter'] = startmeter
+        jparm['unitpay'] = d['unitpay']
+        print('active: {}'.format(active))
+        data = json.dumps(jparm)
+        requests.post(consumerurl,data=json.dumps(data),headers = {"Content-Type": "application/json"})
+        requests.post('{}/meter'.format(providerurl),data=json.dumps(data),headers = {"Content-Type": "application/json"})
         sleep (wait)
+    print('done charging. active: {}'.format(active))
     requests.delete(consumerurl)
     return "<h1>charge initiated</h1>"
 
@@ -44,8 +54,8 @@ def home_put():
 def home_delete():
     global active, consumerurl
     active = 0
-    print(consumerurl)
-    requests.delete(consumerurl)
+    # print('stopping ' + consumerurl)
+    # requests.delete(consumerurl)
     return "<h1>charge stopped</h1>"
 
 @app.route('/reset', methods=['PUT'])

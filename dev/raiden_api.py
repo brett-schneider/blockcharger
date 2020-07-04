@@ -103,6 +103,16 @@ class rnode:
             jr = [ x for x in jr if x['identifier'] == '{}'.format(id) ]
         return jr
 
+    def getbalance(self,id):
+        a = self.histpay(id=id)
+        balance = 0
+        for p in a:
+            if 'amount' in p:
+                balance += int(p['amount'])
+            else:
+                print(p)
+        return balance
+
     def lastpay(self, token=None, target=None):
         # Query the payment history. This includes successful (EventPaymentSentSuccess) and
         # failed (EventPaymentSentFailed) sent payments as well as received payments (EventPaymentReceivedSuccess).
@@ -124,7 +134,10 @@ class rnode:
         jr = [ x for x in jr if 'target' in x ]
         m = {}
         for x in jr:
-            d = datetime.strptime(x['log_time'],'%Y-%m-%dT%H:%M:%S.%f')
+            if len(x['log_time']) == 19:
+                d = datetime.strptime(x['log_time'],'%Y-%m-%dT%H:%M:%S')    
+            else:
+                d = datetime.strptime(x['log_time'],'%Y-%m-%dT%H:%M:%S.%f')
             t = x['target']
             if t in m:
                 if m[t] < d:
