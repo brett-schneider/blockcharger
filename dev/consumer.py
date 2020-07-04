@@ -2,15 +2,16 @@
 
 import json
 import time
-from datetime import datetime
 import random
 from raiden_api import rnode
 import argparse
 import requests
 from math import ceil
 
-DEFAULT_PROVIDER_ADDRESS = "http://localhost:5000"  # node 3
+DEFAULT_PROVIDER_ADDRESS = "http://localhost:5000"  
 DEFAULT_CONSUMER_NODE_PORT = 5001
+DEFAULT_METER_ADDRESS = "http://localhost:5200" 
+DEFAULT_PAYMENT_PORT = 5900
 
 def getmaxcharge():  # dummy for maximum chargeability
     return 20
@@ -21,7 +22,7 @@ def getmaxspeed():  # dummy for max charge speed
 def getunitpay(speed, price, paypersec = None):
     if paypersec is None:
         # default: 5 payments per second
-        paypersec = 5
+        paypersec = 0.5
     # actual unit of payment
     iup = int(speed*price/paypersec/3600)
     # may result in inaccurate decimal representation
@@ -47,8 +48,24 @@ def parse_args():
         "--provider-address",
         action="store",
         default=DEFAULT_PROVIDER_ADDRESS,
-        help="set the ETH address of the provider (default: {})".format(
+        help="set provider api address (default: {})".format(
             DEFAULT_PROVIDER_ADDRESS
+        ),
+    )
+    parser.add_argument(
+        "--meter-address",
+        action="store",
+        default=DEFAULT_METER_ADDRESS,
+        help="set meter address (default: {})".format(
+            DEFAULT_METER_ADDRESS
+        ),
+    )
+    parser.add_argument(
+        "--payment-port",
+        action="store",
+        default=DEFAULT_PAYMENT_PORT,
+        help="set payment server port (default: {})".format(
+            DEFAULT_PAYMENT_PORT
         ),
     )
     return parser.parse_args()
@@ -72,6 +89,7 @@ chargemaxkw = jr['maxkw']
 r = requests.put('{}/client'.format(args.provider_address))
 if r.status_code != 200:
     print (r._content)
+    print ('error: {}'.format(r.status_code))
     exit (r.status_code)
 jr = json.loads(r.text)
 payid = jr['identifier']
@@ -84,28 +102,85 @@ print ('chargespeed: {}'.format(chargespeed))
 print ('unitpay: {}'.format(unitpay))
 meterunit = unitpay/priceperkwh
 print ('meterunit: {} kWh'.format(meterunit))
-exit (0)
+for key,val in node.lastpay().items():
+    print ('{}: {}'.format(key,val))
 
-while True: 
-    try:
-        start = time.time()
-        s = node.pay(provider, unitpay, node.token, payid)
-        end = time.time()
-        print(end - start)
-        # 409 conflict: If the address or the amount is invalid or if there is no path to the target, or if the identifier is already in use for a different payment.
-        if s.status_code == 409:
-            print("409 encountered, opening channel")
-            o = node.openchan(provider, getmaxcharge() * priceperkwh)
-            if o.status_code != 201:
-                break
-    except KeyboardInterrupt:
-        break
+# commence charge
 
-    # 200 OK
-    # 404 Not Found: The given token and / or target addresses are not valid eip55-encoded Ethereum addresses
-    # 402 Payment Required: If the payment can’t start due to insufficient balance
-    # 400 Bad Request: malformed json
+from werkzeug.serving import make_server
+import threading
+from flask import Flask
+from logging import Logger
+log = Logger(__name__)
 
+class ServerThread(threading.Thread):
+
+    def __init__(self, app):
+        threading.Thread.__init__(self)
+        self.srv = make_server('127.0.0.1', args.payment_port, app)
+        self.ctx = app.app_context()
+        self.ctx.push()
+
+    def run(self):
+        log.info('starting server')
+        self.srv.serve_forever()
+
+    def shutdown(self):
+        self.srv.shutdown()
+
+def stop_server():
+    global server
+    server.shutdown()
+
+def start_server():
+    global server
+    app = Flask('myapp')
+    @app.route('/', methods=['GET'])
+    def home_get():
+        node.pay(provider, unitpay, node.token, id=payid)
+        balance = node.getbalance(payid)
+        
+        return "<h1>meter ping received</h1>"
+    @app.route('/', methods=['DELETE'])
+    def home_delete():
+        stop_server()
+        return "<h1>finished charging</h1>"
+    server = ServerThread(app)
+    server.start()
+    log.info('server started')
+
+from time import sleep
+start_server()
+print('server started')
+chargedict = {}
+chargedict['meterunit'] = meterunit
+chargedict['chargespeed'] = chargespeed
+chargedict['consumerurl'] = "http://localhost:{}/".format(args.payment_port)
+chargedict['payid'] = payid
+#data = '{ "meterunit": ' + '{}'.format(meterunit) + ',  "chargespeed": ' + '{}'.format(chargespeed) + ', "consumerurl": "http://localhost:' + str(args.payment_port) + '/" }'
+data = json.dumps(chargedict)
+r = requests.get(args.meter_address)
+meter = json.loads(r.text)['meter']
+print('requesting charge')
+r = requests.put(args.meter_address,data=json.dumps(data),headers = {"Content-Type": "application/json"})
+print('monitor charge')
+(m,n) = (0.0,0.0)
+print('server started')
+wait = meterunit * 3600 / chargespeed
+
+# try:
+#     while m+(meterunit*5) > n:
+#         r = requests.get(args.meter_address)
+#         n = m
+#         m = json.loads(r.text)['meter']
+#         print ('m: {}, n: {}'.format(m,n))
+#         print (wait)
+#         sleep(wait+2)
+#         print('loop')
+# except KeyboardInterrupt:
+#     stop_server()
+
+stop_server()
 exit(0)
 
 start = time.time()

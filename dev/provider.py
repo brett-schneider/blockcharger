@@ -30,7 +30,6 @@ def parse_args():
     )
     return parser.parse_args()
 
-
 # Parse commmand-line arguments.
 args = parse_args()
 node = rnode(args.node_port)
@@ -40,7 +39,7 @@ def stopmeter():
     return requests.delete(meterurl)
 
 # consts
-meterurl = 'localhost:5020'
+meterurl = 'localhost:5200'
 
 conf = { 'priceperkwh': 300000000000000000,
         'maxkw': 25, 
@@ -88,3 +87,4 @@ def meter_put():
     return json.dumps ({ 'status': 'OK', })
 
 app.run()
+
