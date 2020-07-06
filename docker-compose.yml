@@ -67,3 +67,17 @@ services:
       --enable-monitoring
       --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
       --api-address 127.0.0.1:5003
+
+  raiden4:
+    <<: *raiden
+    volumes:
+      - './volumes/raiden4:/shared'
+    command:
+      --keystore-path /shared/keystore
+      --environment-type development
+      --network-id goerli
+      --accept-disclaimer
+      --datadir /shared
+      --enable-monitoring
+      --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
+      --api-address 127.0.0.1:5004
