@@ -21,8 +21,8 @@ def getmaxspeed():  # dummy for max charge speed
 
 def getunitpay(speed, price, paypersec = None):
     if paypersec is None:
-        # default: 5 payments per second
-        paypersec = 0.5
+        # default: 0.2 payments per second
+        paypersec = 0.2
     # actual unit of payment
     iup = int(speed*price/paypersec/3600)
     # may result in inaccurate decimal representation

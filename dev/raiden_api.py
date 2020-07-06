@@ -37,7 +37,7 @@ class rnode:
         for p in d:
             print(p)
 
-    def pay(self, target, amount, token=None, id=1):
+    def pay(self, target, amount, token=None, id=1, deposit=10**19):
         ptoken = token
         if ptoken is None:
             ptoken = self.token
@@ -51,7 +51,7 @@ class rnode:
         )
         if r.status_code == 409:
             print("409 encountered, opening channel")
-            o = self.openchan(provider, getmaxcharge() * priceperkwh)
+            self.openchan(target, deposit)
             # if o.status_code != 201:
         # print(r.status_code)
         # print(r.text)
