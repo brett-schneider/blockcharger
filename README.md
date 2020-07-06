@@ -20,6 +20,14 @@ Log into the VM:
 vagrant ssh
 ```
 
+The project directory is located at `/vagrant` inside the VM. Run the following command to change the current working directory after sshing into the VM:
+
+```sh
+cd /vagrant
+```
+
+Afterwards, you may call any of the commands below:
+
 #### Geth and Raiden nodes
 
 It might be necessary to start a Raiden node a little bit later than Geth. In that case run the following in two separate terminals:
@@ -31,6 +39,10 @@ docker-compose up geth
 ```sh
 docker-compose up raiden1
 ```
+
+We support 4 Raiden nodes currently: `raiden1`, `raiden2`, `raiden3`, and `raiden4`.
+
+Also, it is possible to start a service with `make`, e.g.: `make geth` or `make raiden1`. See the `Makefile` file for the list of all targets like that.
 
 #### Python
 
@@ -44,6 +56,12 @@ Activate the Python environment:
 
 ```sh
 source ./venv/bin/activate
+```
+
+Now you are able to run the Python scripts from the `dev` directory by invoking them like this:
+
+```sh
+python ./dev/w3.py
 ```
 
 ### Caveats
