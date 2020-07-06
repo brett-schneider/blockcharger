@@ -43,13 +43,9 @@ geth_shell:
 geth:
 	docker-compose up geth
 
-.PHONY: raiden1
-raiden1:
-	docker-compose up raiden1
-
-.PHONY: raiden2
-raiden2:
-	docker-compose up raiden2
+.PHONY: raiden1 raiden2 raiden3
+raiden1 raiden2 raiden3:
+	docker-compose up $@
 
 .PHONY: raidens
 raidens:
