@@ -10,7 +10,7 @@ w3.middleware_onion.inject(geth_poa_middleware, layer=0)
 w3.eth.getBlock("latest")
 abi = json.loads( '[ { "inputs": [ { "internalType": "address", "name": "_address", "type": "address" }, { "internalType": "string", "name": "_location", "type": "string" } ], "name": "registerProvider", "outputs": [ { "internalType": "uint256", "name": "providerID", "type": "uint256" } ], "stateMutability": "nonpayable", "type": "function" }, { "inputs": [], "stateMutability": "nonpayable", "type": "constructor" }, { "inputs": [ { "internalType": "uint256", "name": "", "type": "uint256" } ], "name": "energy_providers", "outputs": [ { "internalType": "uint256", "name": "id", "type": "uint256" }, { "internalType": "address", "name": "provider_address", "type": "address" }, { "internalType": "string", "name": "location", "type": "string" } ], "stateMutability": "view", "type": "function" }, { "inputs": [], "name": "getAllProviders", "outputs": [ { "internalType": "address[]", "name": "", "type": "address[]" } ], "stateMutability": "view", "type": "function" }, { "inputs": [ { "internalType": "uint256", "name": "providerID", "type": "uint256" } ], "name": "getProviderLocation", "outputs": [ { "internalType": "string", "name": "location", "type": "string" } ], "stateMutability": "view", "type": "function" } ]')
 
-checksum_address = Web3.toChecksumAddress("0xecf8c9f5200856b66a9ec8bb6c570d6bf4e0edb2")
+checksum_address = Web3.toChecksumAddress("0xb14f3486bb315d7cad8abacc745e3da6151ecb08")
 our_address = "0x8ccAE3CC7b16Ce2c7AbC4fA098eE1a185287C7a4"
 nonce = w3.eth.getTransactionCount(our_address)
 
