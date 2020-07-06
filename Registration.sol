@@ -35,6 +35,7 @@ contract Registration {
 
 
     function registerProvider(address _address, string memory _location) public returns (uint providerID) {
+        require(_address == msg.sender);
         providerID = numProviders;
         energy_providers[providerID] = Provider(providerID, _address, _location);
         numProviders++;
@@ -42,4 +43,3 @@ contract Registration {
     }
 
 }
-    
