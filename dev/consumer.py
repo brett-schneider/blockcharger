@@ -125,7 +125,8 @@ def start_server():
         # meter = json.loads(r.text)['meter']
         print ('meter: {} :: startmeter: {} :: priceperkwh: {}'.format(meter, startmeter, priceperkwh))
         balancemeter = (meter - startmeter) * priceperkwh
-        print ('balance: {}, meter: {:.5f}, startmeter: {:.5f}, balance-by-meter: {}'.format(balance,meter,startmeter,int(balancemeter)))
+        print ('payment issued: {}, kwh received: {:.5f}, payment calculated by meter: {}'.format(balance*(10**-18),meter-startmeter,balancemeter*(10**-18)))
+        # print ('balance: {}, meter: {:.5f}, startmeter: {:.5f}, balance-by-meter: {}'.format(balance,meter,startmeter,int(balancemeter)))
         if abs(balance - balancemeter) > unitpay * 2:
             print('abort: balances differ by {}, max {}'.format(abs(balance - balancemeter),unitpay*2))
             requests.delete(args.meter_address)
@@ -186,6 +187,7 @@ while True:
         print ('1: connect charger')
         print ('2: disconnect charger')
         print ('3: begin charge')
+        print ('4: leave')
         key = input()
         if key == '1':
             x = connectcharger()
@@ -195,6 +197,8 @@ while True:
             chargespeed = min(chargemaxkw, getmaxspeed())
             unitpay = getunitpay(chargespeed, priceperkwh)
             meterunit = unitpay/priceperkwh
+            print ('priceperkwh: {}'.format(priceperkwh))
+            print ('provider address: {}'.format(provider))
             print ('chargespeed: {}'.format(chargespeed))
             print ('unitpay: {}'.format(unitpay))
             print ('meterunit: {} kWh'.format(meterunit))
@@ -211,6 +215,8 @@ while True:
             else:
                 (payid,startmeter) = begincharge(meterunit,chargespeed)
                 # print ('recieved payid from charger: {}'.format(payid))
+        elif key == '4':
+            break
     except KeyboardInterrupt:
         break
 stop_server()

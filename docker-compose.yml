@@ -38,7 +38,7 @@ services:
       --datadir /shared
       --enable-monitoring
       --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
-      --api-address 127.0.0.1:5001
+      --api-address 0.0.0.0:5001
 
   raiden2:
     <<: *raiden
@@ -52,7 +52,7 @@ services:
       --datadir /shared
       --enable-monitoring
       --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
-      --api-address 127.0.0.1:5002
+      --api-address 0.0.0.0:5002
 
   raiden3:
     <<: *raiden
@@ -66,7 +66,7 @@ services:
       --datadir /shared
       --enable-monitoring
       --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
-      --api-address 127.0.0.1:5003
+      --api-address 0.0.0.0:5003
 
   raiden4:
     <<: *raiden
@@ -80,4 +80,4 @@ services:
       --datadir /shared
       --enable-monitoring
       --eth-rpc-endpoint http://${GETH_IP_ADDR}:${GETH_RPC_PORT}
-      --api-address 127.0.0.1:5004
+      --api-address 0.0.0.0:5004

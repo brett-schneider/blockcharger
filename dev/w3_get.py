@@ -28,5 +28,5 @@ locations = []
 for i in range(len(providers)):
     locations.append(smartcontract.functions.getProviderLocation(i).call())
     
-print(providers)
-print(locations)
+print(providers[:-2])
+print(locations[:-2])

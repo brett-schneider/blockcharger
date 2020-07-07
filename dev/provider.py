@@ -84,7 +84,7 @@ def meter_post():
     unitpay = d['unitpay']
     balancemeter = (meter - startmeter) * args.price_per_kwh
     balance = node.getbalance(payid)
-    print ('balance: {}, meter: {:.5f}, startmeter: {:.5f}, balance-by-meter: {}'.format(balance,meter,startmeter,int(balancemeter)))
+    print ('payment received: {}, kwh delivered: {:.5f}, payment expected: {}'.format(balance*(10**-18),meter-startmeter,balancemeter*(10**-18)))
     if abs(balance - balancemeter) > unitpay * 2:
         print('abort: balances differ by {}, max {}'.format(abs(balance - balancemeter),unitpay*2))
         requests.delete(args.meter_address)
@@ -95,5 +95,5 @@ def meter_post():
     # what abt restarts when more payment arrives
     return json.dumps ({ 'status': 'OK', })
 
-app.run()
+app.run()   
 

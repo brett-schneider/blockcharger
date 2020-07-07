@@ -66,7 +66,7 @@ def home_put():
         # requests.post(backurl,data=json.dumps(data),headers = {"Content-Type": "application/json"})
         requests.post(consumerurl,data=json.dumps(data),headers = {"Content-Type": "application/json"})
         requests.post('{}/meter'.format(providerurl),data=json.dumps(data),headers = {"Content-Type": "application/json"})
-        sleep (wait)
+        # sleep (wait)
     print('done charging. active: {}'.format(active))
     # to service both consumer and provider within demo
     # requests.delete(backurl)
