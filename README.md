@@ -65,6 +65,18 @@ Now you are able to run the Python scripts from the `dev` directory by invoking 
 python ./dev/w3.py
 ```
 
+Here is a list of Python scripts (all of them could be found in the `dev` directory) implementing various elements of the energy traiding setup:
+
+- meter.py
+
+- provider.py
+
+- consumer.py
+
+- w3.py
+
+- w3_get.py
+
 ### Caveats
 
 It might be worth to start the Geth container first to let it synchronize the blockchain before starting Raiden nodes.
