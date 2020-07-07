@@ -41,7 +41,7 @@ docker-compose up geth
 docker-compose up raiden1
 ```
 
-We support 4 Raiden nodes currently: `raiden1`, `raiden2`, `raiden3`, and `raiden4`.
+We support 4 Raiden nodes currently: `raiden1`, `raiden2`, `raiden3`, and `raiden4`. Raiden nodes `raiden5` and `raiden6` are currently not handled via `docker-compose.yml`.
 
 Also, it is possible to start a service with `make`, e.g.: `make geth` or `make raiden1`. See the `Makefile` file for the list of all targets like that.
 
