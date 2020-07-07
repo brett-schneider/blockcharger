@@ -184,6 +184,8 @@ def begincharge(meterunit,chargespeed):
 
 while True:
     try:
+        print ('f: find charger')
+        print ('o: see last charge')
         print ('1: connect charger')
         print ('2: disconnect charger')
         print ('3: begin charge')
@@ -217,6 +219,15 @@ while True:
                 # print ('recieved payid from charger: {}'.format(payid))
         elif key == '4':
             break
+        elif key == 'f':
+            with open("w3_get.py", "rb") as source_file:
+                code = compile(source_file.read(), "w3_get.py", "exec")
+                exec(code)
+        elif key == 'o':
+            last = (node.lastpay())
+            for k,v in last.items():
+                print ('cpo: {} last used: {}'.format(k,v))
+
     except KeyboardInterrupt:
         break
 stop_server()
