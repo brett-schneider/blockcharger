@@ -184,12 +184,14 @@ def begincharge(meterunit,chargespeed):
 
 while True:
     try:
+        print (' ')
         print ('f: find charger')
         print ('o: see last charge')
         print ('1: connect charger')
         print ('2: disconnect charger')
         print ('3: begin charge')
         print ('4: leave')
+        print (' ')
         key = input()
         if key == '1':
             x = connectcharger()
@@ -199,10 +201,10 @@ while True:
             chargespeed = min(chargemaxkw, getmaxspeed())
             unitpay = getunitpay(chargespeed, priceperkwh)
             meterunit = unitpay/priceperkwh
-            print ('priceperkwh: {}'.format(priceperkwh))
+            print ('priceperkwh: {} ({:.5f} EBC)'.format(priceperkwh,priceperkwh*(10**-18)))
             print ('provider address: {}'.format(provider))
             print ('chargespeed: {}'.format(chargespeed))
-            print ('unitpay: {}'.format(unitpay))
+            print ('unitpay: {} ({:.5f} EBC)'.format(unitpay,unitpay*(10**-18)))
             print ('meterunit: {} kWh'.format(meterunit))
         elif key == '2':
             if provider is None:
@@ -226,7 +228,8 @@ while True:
         elif key == 'o':
             last = (node.lastpay())
             for k,v in last.items():
-                print ('cpo: {} last used: {}'.format(k,v))
+                if k != '0x1159915CFd2E19223edb08B0CD6711EAC0fA87a6':
+                    print ('cpo: {} last used: {}'.format(k,v))
 
     except KeyboardInterrupt:
         break
